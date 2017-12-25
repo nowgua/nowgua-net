@@ -6,7 +6,7 @@ nuget:
   
 before_build:
 - cd C:\projects\nowgua-net
-- appveyor-retry nuget restore -v minimal
+- appveyor-retry nuget restore
 
 platform: Any CPU
  
@@ -35,9 +35,3 @@ deploy:
     appveyor_repo_tag: true 
 
 
-notifications:
-- provider: Slack
-  incoming_webhook: https://hooks.slack.com/services/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
-  on_build_success: true
-  on_build_failure: true
-  on_build_status_changed: false
