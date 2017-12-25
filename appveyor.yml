@@ -5,7 +5,7 @@ nuget:
   project_feed: true
   
 before_build:
-- cd C:\nowgua\nowgua-net
+- cd C:\projects\nowgua-net
 - appveyor-retry nuget restore -v detailed
 
 build:
@@ -16,7 +16,7 @@ build:
   verbosity: detailed
 
 test_script:
-- cd C:\nowgua\nowgua-net
+- cd C:\projects\nowgua-net
 - dotnet.exe test "nowguaClientTest"
 
 artifacts:
