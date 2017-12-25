@@ -12,13 +12,12 @@ namespace nowguaClient.Helpers
     public interface IApiService
     {
         Task<APIResponse<TResult>> Get<TResult>(string APIOperation);
-        Task<APIResponse<TResult>> Post<TResult>(string APIOperation);
         Task<APIResponse<TResult>> Post<TModel, TResult>(string APIOperation, TModel Model);
         Task<APIResponse> Put(string APIOperation);
         Task<APIResponse> Put<TModel>(string APIOperation, TModel Model);
         Task<APIResponse> Delete(string APIOperation);
+        Task<APIResponse> Delete<TModel>(string APIOperation, TModel Model);
         Task<byte[]> Download(string APIOperation);
-        void Connect();
     }
 
     /// <summary>
@@ -36,7 +35,15 @@ namespace nowguaClient.Helpers
         /// </summary>
         public NowguaConfiguration NowguaConfiguration { get; set; }
 
-        private string Token { get; set; }
+        /// <summary>
+        /// Token de connexion
+        /// </summary>
+        public string Token { get; set; }
+
+        /// <summary>
+        /// Date d'expiration du token
+        /// </summary>
+        public DateTime TokenExpiresDate { get; set; }
 
         /// <summary>
         /// Connexion à l'API nowgua
@@ -73,21 +80,6 @@ namespace nowguaClient.Helpers
         {
             var httpClient = GetHttpClient();
             var httpContent = new StringContent(JsonConvert.SerializeObject(Model), Encoding.UTF8, "application/json");
-
-            return httpClient.PostAsync(APIOperation, httpContent)
-                        .ContinueWith(r => new APIResponse<TResult>(r.Result));
-        }
-
-        /// <summary>
-        /// Opération POST
-        /// </summary>
-        /// <typeparam name="TResult">Type de résultat attendu</typeparam>
-        /// <param name="APIOperation">URL de l'API</param>
-        /// <returns></returns>
-        public Task<APIResponse<TResult>> Post<TResult>(string APIOperation)
-        {
-            var httpClient = GetHttpClient();
-            var httpContent = new StringContent("", Encoding.UTF8, "application/json");
 
             return httpClient.PostAsync(APIOperation, httpContent)
                         .ContinueWith(r => new APIResponse<TResult>(r.Result));
@@ -137,6 +129,22 @@ namespace nowguaClient.Helpers
         }
 
         /// <summary>
+        /// Opération DELETE
+        /// </summary>
+        /// <typeparam name="TModel">Type de modèle envoyé</typeparam>
+        /// <param name="APIOperation">URL de l'API</param>
+        /// <param name="Model">Modèle à envoyer</param>
+        /// <returns></returns>
+        public Task<APIResponse> Delete<TModel>(string APIOperation, TModel Model)
+        {
+            var httpClient = GetHttpClient();
+
+            return httpClient.DeleteAsync(APIOperation)
+                        .ContinueWith(r => new APIResponse(r.Result));
+        }
+
+
+        /// <summary>
         /// Opération Download
         /// </summary>
         /// <param name="APIOperation">URL de l'API</param>
@@ -157,15 +165,24 @@ namespace nowguaClient.Helpers
         /// <summary>
         /// Connexion à l'API
         /// </summary>
-        public void Connect()
+        public AuthConfiguration InitAuthProvider()
         {
-            var r = this.Get<NowguaConfiguration>("api/1.0/appsettings/globalConfiguration");
+            var httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri(this.ConnectionSettings.ApiBaseURL);
+
+            var r = httpClient.GetAsync("/api/1.0/appsettings/auth0configuration")
+                        .ContinueWith(resp => new APIResponse<AuthConfiguration>(resp.Result));
+
             r.Wait();
 
             if (r.Result.Error != null)
                 throw new Exception(r.Result.Error.Code + " " + r.Result.Error.Message);
 
-            this.NowguaConfiguration = r.Result.Result;
+            if (this.NowguaConfiguration == null)
+                this.NowguaConfiguration = new NowguaConfiguration();
+
+            this.NowguaConfiguration.Auth = r.Result.Result;
+            return this.NowguaConfiguration.Auth;
         }
 
         /// <summary>
@@ -174,7 +191,52 @@ namespace nowguaClient.Helpers
         /// <returns></returns>
         public string GenerateOrRefreshToken()
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(this.Token))
+            {
+                this.InitAuthProvider();
+                var token = GenerateJwtToken();
+                this.Token = token.access_token;
+                this.TokenExpiresDate = DateTime.Now.AddSeconds(token.expires_in);
+
+                return this.Token;
+            }
+
+            if (DateTime.Compare(DateTime.Now.AddMinutes(15), this.TokenExpiresDate) > 0)
+            {
+                var token = GenerateJwtToken();
+                this.Token = token.access_token;
+                this.TokenExpiresDate = DateTime.Now.AddSeconds(token.expires_in);
+            }  
+            
+            return this.Token;
+        }
+
+        /// <summary>
+        /// Génération d'un Token
+        /// </summary>
+        /// <returns></returns>
+        public AuthToken GenerateJwtToken()
+        {
+            var httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri(this.NowguaConfiguration.Auth.BaseUrl);
+
+            var httpContent = new StringContent(JsonConvert.SerializeObject(
+                                                    new AuthModel(this.ConnectionSettings.ClientId
+                                                                    , this.ConnectionSettings.ClientSecret
+                                                                    , this.NowguaConfiguration.Auth.Audience
+                                                                 )
+                                                )
+                                                , Encoding.UTF8
+                                                , "application/json"
+                                            );
+
+            var r = httpClient.PostAsync("", httpContent);
+            r.Wait();
+
+            var token = r.Result.Content.ReadAsStringAsync();
+            token.Wait();
+
+            return JsonConvert.DeserializeObject<AuthToken>(token.Result);
         }
 
         /// <summary>
@@ -189,7 +251,7 @@ namespace nowguaClient.Helpers
 
             httpClient.BaseAddress = new Uri(ConnectionSettings.ApiBaseURL);
             httpClient.DefaultRequestHeaders.Remove("Authorization");
-            httpClient.DefaultRequestHeaders.Add("Authorization", "Basic " + Token);
+            httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + Token);
 
             return httpClient;
         }
@@ -307,5 +369,10 @@ namespace nowguaClient.Helpers
     public class APIBadRequestResult : Dictionary<string, List<string>>
     {
 
+    }
+
+    public class BooleanResult
+    {
+        public bool result { get; set; }
     }
 }

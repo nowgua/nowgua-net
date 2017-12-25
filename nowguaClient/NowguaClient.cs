@@ -47,7 +47,7 @@ namespace nowguaClient
         public NowguaClient(NowguaConnectionSettings ConnectionSettings)
         {
             this._apiService = new ApiService(ConnectionSettings);
-            this._apiService.Connect();
+            //this._apiService.Connect();
             this._searchService = new SearchService(this._apiService.NowguaConfiguration.ElasticSearch);
 
             this.Interventions = new InterventionService(_apiService, _searchService);

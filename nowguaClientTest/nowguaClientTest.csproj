@@ -78,6 +78,7 @@
   <ItemGroup>
     <Compile Include="APIResponseTest.cs" />
     <Compile Include="ApiServiceTest.cs" />
+    <Compile Include="BaseTest.cs" />
     <Compile Include="FileServicesTest.cs" />
     <Compile Include="InterventionServiceTest.cs" />
     <Compile Include="NowguaClientTest.cs" />
@@ -98,6 +99,9 @@
       <Project>{c7124233-724b-4dda-ad0f-2ec6aa156337}</Project>
       <Name>nowguaClient</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="datas\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
