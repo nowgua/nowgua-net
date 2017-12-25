@@ -32,5 +32,24 @@ namespace nowguaClientTest
         {
             Assert.True(false, "Test à coder");
         }
+
+        /// <summary>
+        /// On vérifie qu'on reçoit bien un webhook à la création et modification d'une intervention
+        /// </summary>
+        [Fact]
+        public void InterventionWebHookTest()
+        {
+            Assert.True(false, "Test à coder");
+        }
+
+        /// <summary>
+        /// On vérifie qu'on reçoit bien un webhook à la création et modification d'un site
+        /// </summary>
+        [Fact]
+        public void SiteWebHookTest()
+        {
+            Assert.True(false, "Test à coder");
+        }
+
     }
 }
