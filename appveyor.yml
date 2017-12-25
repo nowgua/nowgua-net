@@ -1,0 +1,37 @@
+version: '1.0.{build}'
+
+nuget:
+  account_feed: true
+  project_feed: true
+  
+before_build:
+- cd C:\projects\nowgua-net
+- appveyor-retry nuget restore
+
+platform: Any CPU
+ 
+configuration: Debug
+
+build:
+  project: nowguaClient.sln      # path to Visual Studio solution or project
+  publish_nuget: true             # package projects with .nuspec files and push to artifacts
+
+  # MSBuild verbosity level
+  verbosity: minimal
+
+test_script:
+- cd C:\projects\nowgua-net
+- dotnet.exe test "nowguaClientTest"
+
+artifacts:
+- path: '**\*.nupkg'
+  name: NET-Package
+  type: NuGetPackage
+
+deploy:
+- provider: Environment
+  name: Nowgua-net
+  on: 
+    appveyor_repo_tag: true 
+
+
