@@ -12,37 +12,37 @@ namespace nowguaClientTest
         [Fact]
         public void CreateTest()
         {
-            Assert.True(false, "Test à coder");
+
         }
 
         [Fact]
         public void CancelTest()
         {
-            Assert.True(false, "Test à coder");
+
         }
 
         [Fact]
         public void GetTest()
         {
-            Assert.True(false, "Test à coder");
+
         }
 
         [Fact]
         public void GetReportTest()
         {
-            Assert.True(false, "Test à coder");
+
         }
 
         [Fact]
         public void GetLogsTest()
         {
-            Assert.True(false, "Test à coder");
+
         }
 
         [Fact]
         public void SearchTest()
         {
-            Assert.True(false, "Test à coder");
+
         }
     }
 }

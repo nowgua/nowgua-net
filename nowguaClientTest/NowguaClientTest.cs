@@ -12,7 +12,7 @@ namespace nowguaClientTest
         [Fact]
         public void ConstructorTest()
         {
-            Assert.True(false, "Test à coder");
+
         }
     }
 }

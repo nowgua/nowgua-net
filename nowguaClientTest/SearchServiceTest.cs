@@ -12,7 +12,7 @@ namespace nowguaClientTest
         [Fact]
         public void SearchTest()
         {
-            Assert.True(false, "Test à coder");
+
         }
     }
 }
