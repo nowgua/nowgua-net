@@ -27,7 +27,7 @@ after_build:
 - ls
  
 artifacts:
-- path: 'C:\projects\nowgua-net\nowguaClient\bin\Package\*.nupkg'
+- path: 'projects\nowgua-net\nowguaClient\bin\Package\*.nupkg'
   name: NET-Package
   type: NuGetPackage
 
