@@ -31,6 +31,6 @@ deploy:
 - provider: Environment
   name: Nowgua-net
   on: 
-    appveyor_repo_tag: true 
+    appveyor_repo_tag: false 
 
 
