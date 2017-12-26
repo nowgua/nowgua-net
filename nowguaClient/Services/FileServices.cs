@@ -1,10 +1,5 @@
-﻿using Nest;
-using nowguaClient.Helpers;
-using nowguaClient.Models.Interventions;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using nowguaClient.Helpers;
+using nowguaClient.Models.Files;
 using System.Threading.Tasks;
 
 namespace nowguaClient.Services
@@ -17,10 +12,10 @@ namespace nowguaClient.Services
     /// <summary>
     /// Gestion des fichiers (images, vidéos, pdf etc ...)
     /// </summary>
-    public class FileService : BaseService, IFileService
+    public class FileService : BaseService<FileModel>, IFileService
     {
-        public FileService(ApiService ApiService, SearchService SearchService) 
-            : base(ApiService, SearchService, "api/1.0/files")
+        public FileService(IApiService ApiService, ISearchService SearchService) 
+            : base(ApiService, SearchService, "/api/1.0/files")
         {
 
         }

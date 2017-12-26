@@ -1,6 +1,7 @@
 ﻿using Nest;
 using nowguaClient.Helpers;
 using nowguaClient.Models.Interventions;
+using nowguaClient.Models.Sites;
 using nowguaClient.Models.Users;
 using System;
 using System.Collections.Generic;
@@ -12,28 +13,37 @@ namespace nowguaClient.Services
 {
     public interface IUserService : IBaseService
     {
-        Task<UserMeModel> Get();
+        Task<UserModel> Get(string Id);
     }
 
     /// <summary>
     /// Gestion des utilisateurs
     /// </summary>
-    public class UserService : BaseService, IUserService
+    public class UserService : BaseService<SiteModel>, IUserService
     {
-        public UserService(ApiService ApiService, SearchService SearchService) 
-            : base(ApiService, SearchService, "api/1.0/users")
+        public UserService(IApiService ApiService, ISearchService SearchService) 
+            : base(ApiService, SearchService, "/api/1.0/users")
         {
 
         }
 
         /// <summary>
-        /// Récupération des données de l'utilisateur en cours
+        /// Récupération d'un utilisateur
         /// </summary>
-        /// <param name="Id"></param>
+        /// <param name="Id">Identifiant de l'utilisateur</param>
+        /// <returns></returns>
+        public Task<UserModel> Get(string Id)
+        {
+            return _apiService.Get<UserModel>($"{BaseRoot}/{Id}");
+        }
+
+        /// <summary>
+        /// Récupération de l'utilisateur connecté
+        /// </summary>
         /// <returns>UserMeModel</returns>
         public Task<UserMeModel> Get()
         {
-            return _apiService.Get<UserMeModel>("");
+            return _apiService.Get<UserMeModel>($"{BaseRoot}/me");
         }
     }
 }

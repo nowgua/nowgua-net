@@ -7,9 +7,11 @@ namespace nowguaClient
 {
     public interface INowguaClient
     {
-        InterventionService Interventions { get; }
-        SiteService Sites { get; }
-        WebHookService WebHooks { get; }
+        IInterventionService Interventions { get; }
+        ISiteService Sites { get; }
+        IWebHookService WebHooks { get; }
+        IUserService Users { get; }
+        
     }
 
     /// <summary>
@@ -17,28 +19,33 @@ namespace nowguaClient
     /// </summary>
     public class NowguaClient : INowguaClient
     {
-        private ApiService _apiService { get; }
-        private SearchService _searchService { get; }
+        private IApiService _apiService { get; }
+        private ISearchService _searchService { get; }
 
         /// <summary>
         /// Gestion des interventions
         /// </summary>
-        public InterventionService Interventions { get; internal set; }
+        public IInterventionService Interventions { get; internal set; }
 
         /// <summary>
         /// Gestion des sites
         /// </summary>
-        public SiteService Sites { get; internal set; }
+        public ISiteService Sites { get; internal set; }
 
         /// <summary>
         /// Gestion des webhooks
         /// </summary>
-        public WebHookService WebHooks { get; internal set; }
+        public IWebHookService WebHooks { get; internal set; }
 
         /// <summary>
         /// Gestion des fichiers
         /// </summary>
-        public FileService Files { get; internal set; }
+        public IFileService Files { get; internal set; }
+
+        /// <summary>
+        /// Gestion des utilisateurs
+        /// </summary>
+        public IUserService Users { get; internal set; }
 
         /// <summary>
         /// Connexion à nowgua
@@ -47,13 +54,13 @@ namespace nowguaClient
         public NowguaClient(NowguaConnectionSettings ConnectionSettings)
         {
             this._apiService = new ApiService(ConnectionSettings);
-            //this._apiService.Connect();
-            this._searchService = new SearchService(this._apiService.NowguaConfiguration.ElasticSearch);
+            this._searchService = new SearchService(this._apiService);
 
             this.Interventions = new InterventionService(_apiService, _searchService);
             this.Sites = new SiteService(_apiService, _searchService);
             this.WebHooks = new WebHookService(_apiService, _searchService);
             this.Files = new FileService(_apiService, _searchService);
+            this.Users = new UserService(_apiService, _searchService);
         }
     }
 }

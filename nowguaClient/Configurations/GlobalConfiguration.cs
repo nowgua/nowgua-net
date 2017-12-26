@@ -7,12 +7,14 @@ namespace nowguaClient.Configurations
     /// <summary>
     /// Information de connexion au provider Identity
     /// </summary>
-    public class AuthConfiguration
+    public class GlobalConfiguration
     {
         public string BaseUrl = "https://nowga.eu.auth0.com/oauth/token";
 
         public string Audience { get; set; }
         public string ClientConnexion { get; set; }
+        public string ElasticConnectionString { get; set; }
+        public string ElasticIndex { get; set; }
     }
 
     public class AuthModel

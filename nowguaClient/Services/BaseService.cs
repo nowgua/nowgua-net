@@ -10,18 +10,29 @@ namespace nowguaClient.Services
 
     }
 
-    public class BaseService : IBaseService
+    public class BaseService<TModel> : IBaseService where TModel : class
     {
-        internal ApiService _apiService { get; set; }
-        internal SearchService _searchService { get; set; }
+        internal IApiService _apiService { get; set; }
+        internal ISearchService _searchService { get; set; }
 
-        internal string _baseRoot { get; set; }
+        public string BaseRoot { get; internal set; }
 
-        public BaseService(ApiService ApiService, SearchService SearchService, string BaseRoot)
+        /// <summary>
+        /// Nom du type pour la recherche ElasticSearch
+        /// </summary>
+        public string SearchTypeName
+        {
+            get
+            {
+                return _searchService.TypeName<TModel>();
+            }
+        }
+
+        public BaseService(IApiService ApiService, ISearchService SearchService, string BaseRoot)
         {
             this._apiService = ApiService;
             this._searchService = SearchService;
-            this._baseRoot = BaseRoot;
+            this.BaseRoot = BaseRoot;
         }
     }
 }
