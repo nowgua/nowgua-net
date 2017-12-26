@@ -21,9 +21,6 @@ build:
   # MSBuild verbosity level
   verbosity: minimal
 
-test_script:
-- cd C:\projects\nowgua-net
-- dotnet.exe test "nowguaClientTest"
 
 artifacts:
 - path: '**\*.nupkg'
