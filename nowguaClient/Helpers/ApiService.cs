@@ -11,12 +11,12 @@ namespace nowguaClient.Helpers
 {
     public interface IApiService
     {
-        Task<APIResponse<TResult>> Get<TResult>(string APIOperation);
-        Task<APIResponse<TResult>> Post<TModel, TResult>(string APIOperation, TModel Model);
-        Task<APIResponse> Put(string APIOperation);
-        Task<APIResponse> Put<TModel>(string APIOperation, TModel Model);
-        Task<APIResponse> Delete(string APIOperation);
-        Task<APIResponse> Delete<TModel>(string APIOperation, TModel Model);
+        Task<TResult> Get<TResult>(string APIOperation);
+        Task<TResult> Post<TModel, TResult>(string APIOperation, TModel Model);
+        Task Put(string APIOperation);
+        Task Put<TModel>(string APIOperation, TModel Model);
+        Task Delete(string APIOperation);
+        Task Delete<TModel>(string APIOperation, TModel Model);
         Task<byte[]> Download(string APIOperation);
     }
 
@@ -60,12 +60,12 @@ namespace nowguaClient.Helpers
         /// <typeparam name="TResult">Type de résultat attendu</typeparam>
         /// <param name="APIOperation">URL de l'API</param>
         /// <returns></returns>
-        public Task<APIResponse<TResult>> Get<TResult>(string APIOperation)
+        public Task<TResult> Get<TResult>(string APIOperation)
         {
             var httpClient = GetHttpClient();
 
             return httpClient.GetAsync(APIOperation)
-                        .ContinueWith(r => new APIResponse<TResult>(r.Result));
+                                .ContinueWith(r => APIResponse<TResult>.Parse(r.Result));
         }
 
         /// <summary>
@@ -76,13 +76,13 @@ namespace nowguaClient.Helpers
         /// <param name="APIOperation">URL de l'API</param>
         /// <param name="Model">Modèle à envoyer</param>
         /// <returns></returns>
-        public Task<APIResponse<TResult>> Post<TModel, TResult>(string APIOperation, TModel Model)
+        public Task<TResult> Post<TModel, TResult>(string APIOperation, TModel Model)
         {
             var httpClient = GetHttpClient();
             var httpContent = new StringContent(JsonConvert.SerializeObject(Model), Encoding.UTF8, "application/json");
 
             return httpClient.PostAsync(APIOperation, httpContent)
-                        .ContinueWith(r => new APIResponse<TResult>(r.Result));
+                                .ContinueWith(r => APIResponse<TResult>.Parse(r.Result));
         }
 
         /// <summary>
@@ -92,13 +92,13 @@ namespace nowguaClient.Helpers
         /// <param name="APIOperation">URL de l'API</param>
         /// <param name="Model">Modèle à envoyer</param>
         /// <returns></returns>
-        public Task<APIResponse> Put<TModel>(string APIOperation, TModel Model)
+        public Task Put<TModel>(string APIOperation, TModel Model)
         {
             var httpClient = GetHttpClient();
             var httpContent = new StringContent(JsonConvert.SerializeObject(Model), Encoding.UTF8, "application/json");
 
             return httpClient.PutAsync(APIOperation, httpContent)
-                        .ContinueWith(r => new APIResponse(r.Result));
+                                .ContinueWith(r => new APIResponse(r.Result));
         }
 
         /// <summary>
@@ -106,13 +106,13 @@ namespace nowguaClient.Helpers
         /// </summary>
         /// <param name="APIOperation">URL de l'API</param>
         /// <returns></returns>
-        public Task<APIResponse> Put(string APIOperation)
+        public Task Put(string APIOperation)
         {
             var httpClient = GetHttpClient();
             var httpContent = new StringContent("", Encoding.UTF8, "application/json");
 
             return httpClient.PutAsync(APIOperation, httpContent)
-                        .ContinueWith(r => new APIResponse(r.Result));
+                                .ContinueWith(r => new APIResponse(r.Result));
         }
 
         /// <summary>
@@ -120,12 +120,12 @@ namespace nowguaClient.Helpers
         /// </summary>
         /// <param name="APIOperation">URL de l'API</param>
         /// <returns></returns>
-        public Task<APIResponse> Delete(string APIOperation)
+        public Task Delete(string APIOperation)
         {
             var httpClient = GetHttpClient();
 
             return httpClient.DeleteAsync(APIOperation)
-                        .ContinueWith(r => new APIResponse(r.Result));
+                                .ContinueWith(r => new APIResponse(r.Result));
         }
 
         /// <summary>
@@ -135,12 +135,12 @@ namespace nowguaClient.Helpers
         /// <param name="APIOperation">URL de l'API</param>
         /// <param name="Model">Modèle à envoyer</param>
         /// <returns></returns>
-        public Task<APIResponse> Delete<TModel>(string APIOperation, TModel Model)
+        public Task Delete<TModel>(string APIOperation, TModel Model)
         {
             var httpClient = GetHttpClient();
 
             return httpClient.DeleteAsync(APIOperation)
-                        .ContinueWith(r => new APIResponse(r.Result));
+                                .ContinueWith(r => new APIResponse(r.Result));
         }
 
 
@@ -255,124 +255,5 @@ namespace nowguaClient.Helpers
 
             return httpClient;
         }
-    }
-
-    /// <summary>
-    /// Response de l'API
-    /// </summary>
-    public class APIResponse
-    {
-        /// <summary>
-        /// Détail de l'erreur 
-        /// </summary>
-        public APIResponseError Error { get; set; }
-
-        /// <summary>
-        /// Indique que la réponse est en erreur
-        /// </summary>
-        public bool OnError
-        {
-            get
-            {
-                return this.Error != null;
-            }
-        }
-
-        public APIResponse(HttpResponseMessage ResponseMessage)
-        {
-            InitError(ResponseMessage);
-        }
-
-        internal void InitError(HttpResponseMessage ResponseMessage)
-        {
-            if (ResponseMessage.StatusCode != System.Net.HttpStatusCode.OK)
-            {
-                this.Error = new APIResponseError();
-                this.Error.Code = (int)ResponseMessage.StatusCode;
-                this.Error.Message = ResponseMessage.StatusCode.ToString();
-
-                if (ResponseMessage.StatusCode == System.Net.HttpStatusCode.BadRequest)
-                {
-                    var r = ResponseMessage.Content.ReadAsStringAsync();
-                    r.Wait();
-
-                    this.Error.Result = JsonConvert.DeserializeObject<APIBadRequestResult>(r.Result);
-                }
-
-                if (ResponseMessage.StatusCode == System.Net.HttpStatusCode.InternalServerError)
-                {
-                    var r = ResponseMessage.Content.ReadAsStringAsync();
-                    r.Wait();
-
-                    this.Error.Message = r.Result;
-                }
-            }
-        }
-
-        public APIResponse()
-        {
-
-        }
-    }
-
-    /// <summary>
-    /// Response de l'API typé
-    /// </summary>
-    /// <typeparam name="TResult">Type de retour attendu</typeparam>
-    public class APIResponse<TResult> : APIResponse
-    {
-        /// <summary>
-        /// Résultat de l'API
-        /// </summary>
-        public TResult Result { get; set; }
-
-        public APIResponse(HttpResponseMessage ResponseMessage)
-        {
-            this.InitError(ResponseMessage);
-
-            if (ResponseMessage.StatusCode == System.Net.HttpStatusCode.OK)
-            {
-                var r = ResponseMessage.Content.ReadAsStringAsync();
-                r.Wait();
-
-                this.Result = JsonConvert.DeserializeObject<TResult>(r.Result);
-            }
-        }
-
-        public APIResponse()
-        {
-
-        }
-    }
-
-    /// <summary>
-    /// Erreur de l'API
-    /// </summary>
-    public class APIResponseError
-    {
-        /// <summary>
-        /// Code d'erreur HTTP
-        /// </summary>
-        public int Code { get; set; }
-
-        /// <summary>
-        /// Message de l'erreur
-        /// </summary>
-        public string Message { get; set; }
-
-        /// <summary>
-        /// Information sur l'erreur
-        /// </summary>
-        public object Result { get; set; }
-    }
-
-    public class APIBadRequestResult : Dictionary<string, List<string>>
-    {
-
-    }
-
-    public class BooleanResult
-    {
-        public bool result { get; set; }
     }
 }

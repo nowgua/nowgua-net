@@ -5,6 +5,8 @@ using Moq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using nowguaClient.Exceptions;
+using System;
 
 namespace nowguaClientTest
 {
@@ -108,6 +110,72 @@ namespace nowguaClientTest
             Assert.True(response.OnError);
             Assert.Equal(500, response.Error.Code);
             Assert.Equal("Message d'erreur", response.Error.Message);
+        }
+
+        [Theory]
+        [InlineData(System.Net.HttpStatusCode.InternalServerError, typeof(InternalServerException))]
+        [InlineData(System.Net.HttpStatusCode.Unauthorized, typeof(UnauthorizedException))]
+        [InlineData(System.Net.HttpStatusCode.Forbidden, typeof(UnauthorizedException))]
+        [InlineData(System.Net.HttpStatusCode.NotFound, typeof(NotFoundException))]
+        [InlineData(System.Net.HttpStatusCode.BadRequest, typeof(BadRequestException))]
+        public void GenerateExceptionNoTypeTest(System.Net.HttpStatusCode HttpStatusCode, Type ExceptionExcepted)
+        {
+            HttpResponseMessage m = new HttpResponseMessage(HttpStatusCode);
+            m.Content = new StringContent(HttpStatusCode.ToString());
+
+            if (HttpStatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                APIBadRequestResult BadRequestResult = new APIBadRequestResult();
+                BadRequestResult.Add("Name", new List<string> { "The Name field is required.", "The Name ..." });
+
+                m.Content = new StringContent(JsonConvert.SerializeObject(BadRequestResult));
+            }
+
+            APIResponse response = new APIResponse(m);
+
+            try
+            {
+                response.GenerateException();
+
+                Assert.True(false, "Une exception aurait dû être générée");
+            }
+            catch (Exception ex)
+            {
+                Assert.IsType(ExceptionExcepted, ex);
+            }
+        }
+
+        [Theory]
+        [InlineData(System.Net.HttpStatusCode.InternalServerError, typeof(InternalServerException))]
+        [InlineData(System.Net.HttpStatusCode.Unauthorized, typeof(UnauthorizedException))]
+        [InlineData(System.Net.HttpStatusCode.Forbidden, typeof(UnauthorizedException))]
+        [InlineData(System.Net.HttpStatusCode.NotFound, typeof(NotFoundException))]
+        [InlineData(System.Net.HttpStatusCode.BadRequest, typeof(BadRequestException))]
+        public void GenerateExceptionTypeTest(System.Net.HttpStatusCode HttpStatusCode, Type ExceptionExcepted)
+        {
+            HttpResponseMessage m = new HttpResponseMessage(HttpStatusCode);
+            m.Content = new StringContent(HttpStatusCode.ToString());
+
+            if (HttpStatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                APIBadRequestResult BadRequestResult = new APIBadRequestResult();
+                BadRequestResult.Add("Name", new List<string> { "The Name field is required.", "The Name ..." });
+
+                m.Content = new StringContent(JsonConvert.SerializeObject(BadRequestResult));
+            }
+
+            APIResponse<string> response = new APIResponse<string>(m);
+
+            try
+            {
+                response.GenerateException();
+
+                Assert.True(false, "Une exception aurait dû être générée");
+            }
+            catch (Exception ex)
+            {
+                Assert.IsType(ExceptionExcepted, ex);
+            }
         }
     }
 

@@ -12,7 +12,7 @@ namespace nowguaClient.Services
 {
     public interface IUserService : IBaseService
     {
-        Task<APIResponse<UserMeModel>> Get();
+        Task<UserMeModel> Get();
     }
 
     /// <summary>
@@ -31,7 +31,7 @@ namespace nowguaClient.Services
         /// </summary>
         /// <param name="Id"></param>
         /// <returns>UserMeModel</returns>
-        public Task<APIResponse<UserMeModel>> Get()
+        public Task<UserMeModel> Get()
         {
             return _apiService.Get<UserMeModel>("");
         }
