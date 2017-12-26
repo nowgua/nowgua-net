@@ -67,7 +67,7 @@ namespace nowguaClient.Models.Sites
         /// <summary>
         /// Liste des contacts
         /// </summary>
-        public List<Contact> Contacts { get; set; }
+        public Contacts Contacts { get; set; }
 
         /// <summary>
         /// Type de notification 
@@ -77,7 +77,7 @@ namespace nowguaClient.Models.Sites
         /// <summary>
         /// Liste des instructions
         /// </summary>
-        public List<LabelListModel<int, object, List<string>>> Instructions { get; set; }
+        public CreateInstructionModel Instructions { get; set; }
 
         /// <summary>
         /// Liste des sociétés en copie des rapports 
@@ -93,5 +93,68 @@ namespace nowguaClient.Models.Sites
         /// Equipes qui peuvent accéder au site
         /// </summary>
         public List<EditACLModel> TeamACLs { get; set; }
+
+        /// <summary>
+        /// Création d'un site 
+        /// </summary>
+        /// <param name="Name">Nom du site</param>
+        /// <param name="TransmitterNumber">Numéro télé-transmeteur</param>
+        /// <param name="Type">Identifiant correspondant au type de site. consulter https://nowgua-prod-api.azurewebsites.net/swagger/ui/#!/AppSettings/Api1_0AppsettingsGet pour plus d'information</param>
+        public CreateSiteModel(string Name, string TransmitterNumber, int Type)
+        {
+            this.Type = new LabelIdModel<int>();
+            this.ReportModel = new LabelIdModel<string>();
+            this.Recognition = new EditSiteRecognition();
+            this.AccountBilling = new SiteBillingAccountModel();
+            this.Contacts = new Contacts();
+            this.GroupNotify = new LabelIdModel<int>();
+            this.Instructions = new CreateInstructionModel();
+            this.CompanyReceiptReport = new List<string>();
+            this.CompanyACLs = new List<EditACLModel>();
+            this.TeamACLs = new List<EditACLModel>();
+
+            this.Name = Name;
+            this.TransmitterNumber = TransmitterNumber;
+            this.GroupNotify.Id = 1;
+            this.AccountBilling.SiteBA = false;
+            this.Type.Id = Type;
+        }
+    }
+
+    /// <summary>
+    /// Modèle de création d'instructions
+    /// </summary>
+    public class CreateInstructionModel : List<LabelListModel<int, object, List<string>>>
+    {
+        /// <summary>
+        /// Ajout d'une instruction 
+        /// Pour consulter la liste des différentes inscriptions consulter la page suivante 
+        /// https://nowgua-prod-api.azurewebsites.net/swagger/ui/#!/AppSettings/Api1_0AppsettingsGet
+        /// </summary>
+        /// <param name="InstructionId">Identifiant correspondant au type d'instruction</param>
+        /// <param name="Value">Valeur de l'instruction : string, boolean etc ...</param>
+        public void Add(int InstructionId, object Value)
+        {
+            this.Add(new LabelListModel<int, object, List<string>> { Id = InstructionId, Value = Value.ToString() });
+        }
+    }
+
+    /// <summary>
+    /// Modèle de contacts
+    /// </summary>
+    public class Contacts : List<Contact>
+    {
+        /// <summary>
+        /// Ajout d'un contact
+        /// </summary>
+        /// <param name="FirstName"></param>
+        /// <param name="LastName"></param>
+        /// <param name="Email"></param>
+        /// <param name="Phone"></param>
+        /// <param name="RapportMail"></param>
+        public void Add(string FirstName, string LastName, string Email , string Phone, bool RapportMail)
+        {
+            this.Add(new Contact { FirstName = FirstName, LastName = LastName, Email = Email, Phone = Phone, RapportMail = RapportMail });
+        }
     }
 }

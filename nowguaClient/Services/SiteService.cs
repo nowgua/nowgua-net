@@ -38,7 +38,7 @@ namespace nowguaClient.Services
         /// <returns>Identifiant du site créé</returns>
         public Task<string> Create(CreateSiteModel createSiteModel)
         {
-            return _apiService.Post<CreateSiteModel, string>($"{BaseRoot}", createSiteModel);
+            return _apiService.Post<CreateSiteModel, LabelIdModel<string>>($"{BaseRoot}", createSiteModel).ContinueWith(r => r.Result.Id);
         }
 
         /// <summary>

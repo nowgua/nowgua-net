@@ -10,11 +10,23 @@ namespace nowguaClient.Models.Interventions
         public double Latitude { get; set; }
         public double Longitude { get; set; }
 
+        public bool AddressType { get; set; }
+
         public List<string> Types { get; set; }
         public List<AddressEntityComponent> Components { get; set; }
 
-        public Address()
+        /// <summary>
+        /// Adresse du site
+        /// </summary>
+        /// <param name="Text">Adresse au format texte</param>
+        /// <param name="Latitude">Coordonnée de Latitude de l'adresse</param>
+        /// <param name="Longitude">Coordonnée de Longitude de l'adresse</param>
+        public Address(string Text, double Latitude, double Longitude)
         {
+            this.Text = Text;
+            this.Latitude = Latitude;
+            this.Longitude = Longitude;
+            this.AddressType = false;
             this.Types = new List<string>();
             this.Components = new List<AddressEntityComponent>();
         }
