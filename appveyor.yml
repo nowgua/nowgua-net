@@ -12,7 +12,7 @@ before_build:
 
 platform: Any CPU
  
-configuration: Debug
+configuration: Release
 
 build:
   project: nowguaClient.sln      # path to Visual Studio solution or project
