@@ -22,9 +22,12 @@ build:
   verbosity: minimal
 
 
+after_build:
+- cd C:\projects\nowgua-net\nowguaClient\bin\Package
+- ls
  
 artifacts:
-- path: 'nowgua-net\nowguaClient\bin\Package\*.nupkg'
+- path: 'C:\projects\nowgua-net\nowguaClient\bin\Package\*.nupkg'
   name: NET-Package
   type: NuGetPackage
 
