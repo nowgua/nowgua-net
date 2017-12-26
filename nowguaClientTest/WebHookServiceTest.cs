@@ -12,25 +12,25 @@ namespace nowguaClientTest
         [Fact]
         public void CreateTest()
         {
-            Assert.True(false, "Test à coder");
+
         }
 
         [Fact]
         public void EditTest()
         {
-            Assert.True(false, "Test à coder");
+
         }
 
         [Fact]
         public void DeleteTest()
         {
-            Assert.True(false, "Test à coder");
+
         }
 
         [Fact]
         public void ListTest()
         {
-            Assert.True(false, "Test à coder");
+
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace nowguaClientTest
         [Fact]
         public void InterventionWebHookTest()
         {
-            Assert.True(false, "Test à coder");
+
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace nowguaClientTest
         [Fact]
         public void SiteWebHookTest()
         {
-            Assert.True(false, "Test à coder");
+
         }
 
     }

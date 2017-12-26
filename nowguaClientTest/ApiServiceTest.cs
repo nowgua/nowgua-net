@@ -20,11 +20,10 @@ namespace nowguaClientTest
         public async void GetTest()
         {
             var api = new ApiService(this.ConnectionSettings);
-            var response = await api.Get<UserMeModel>("/api/1.0/users/me");
+            var user = await api.Get<UserMeModel>("/api/1.0/users/me");
 
-            Assert.False(response.OnError);
-            Assert.NotNull(response.Result);
-            Assert.NotEmpty(response.Result.FullName);
+            Assert.NotNull(user);
+            Assert.NotEmpty(user.FullName);
         }
 
         [Fact]
@@ -34,40 +33,35 @@ namespace nowguaClientTest
 
             // Create
             var model = new CreateTeamModel { Name = "Test " + Rand(),  Description = "Description ..." };
-            var response = await api.Post<CreateTeamModel, LabelIdModel<string>>("/api/1.0/teams", model);
+            var createdTeam = await api.Post<CreateTeamModel, LabelIdModel<string>>("/api/1.0/teams", model);
 
-            Assert.False(response.OnError);
-            Assert.NotNull(response.Result);
-            Assert.NotEmpty(response.Result.Id);
+            Assert.NotNull(createdTeam);
+            Assert.NotEmpty(createdTeam.Id);
 
             // Read
-            var teamResponse = await api.Get<TeamModel>($"/api/1.0/teams/{response.Result.Id}");
+            var team = await api.Get<TeamModel>($"/api/1.0/teams/{createdTeam.Id}");
 
-            Assert.False(teamResponse.OnError);
-            Assert.NotNull(teamResponse.Result);
-            Assert.NotEmpty(teamResponse.Result.Name);
-            Assert.Equal(model.Name, teamResponse.Result.Name);
-            Assert.Equal(model.Description, teamResponse.Result.Description);
+            Assert.NotNull(team);
+            Assert.NotEmpty(team.Name);
+            Assert.Equal(model.Name, team.Name);
+            Assert.Equal(model.Description, team.Description);
 
             // Edit
-            var editModel = new EditTeamModel { Id = response.Result.Id, Name = "Test 2 ", Description = "Description 2..." };
-            var editResponse = await api.Put<EditTeamModel>("/api/1.0/teams", editModel);
-
-            Assert.False(editResponse.OnError);
+            var editModel = new EditTeamModel { Id = team.Id, Name = "Test 2 ", Description = "Description 2..." };
+            await api.Put<EditTeamModel>("/api/1.0/teams", editModel);
 
             // Read
-            teamResponse = await api.Get<TeamModel>($"/api/1.0/teams/{editModel.Id}");
+            team = await api.Get<TeamModel>($"/api/1.0/teams/{editModel.Id}");
 
-            Assert.False(teamResponse.OnError);
-            Assert.NotNull(teamResponse.Result);
-            Assert.NotEmpty(teamResponse.Result.Name);
-            Assert.Equal(editModel.Name, teamResponse.Result.Name);
-            Assert.Equal(editModel.Description, teamResponse.Result.Description);
+            Assert.NotNull(team);
+            Assert.NotEmpty(team.Name);
+            Assert.Equal(editModel.Name, team.Name);
+            Assert.Equal(editModel.Description, team.Description);
 
             // Delete 
-            var deleteResponse = await api.Post<LabelIdModel<string>, BooleanResult>($"/api/1.0/teams/delete", new LabelIdModel<string> { Id = editModel.Id });
+            var result = await api.Post<LabelIdModel<string>, BooleanResult>($"/api/1.0/teams/delete", new LabelIdModel<string> { Id = editModel.Id });
 
-            Assert.False(deleteResponse.OnError);
+            Assert.True(result.result);
             Thread.Sleep(2000);
         }
 

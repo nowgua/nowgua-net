@@ -9,13 +9,13 @@ namespace nowguaClient.Services
 {
     public interface ISiteService : IBaseService
     {
-        Task<APIResponse<string>> Create(CreateSiteModel createSiteModel);
-        Task<APIResponse> Edit(EditSiteModel editSiteModel);
-        Task<APIResponse> Share(EditSiteACLsModel editSiteACLsModel);
-        Task<APIResponse> Delete(string Id);
-        Task<APIResponse<SiteModel>> Get(string Id);
-        Task<APIResponse<List<SiteLogModel>>> GetLogs(string Id);
-        Task<APIResponse<List<SiteModel>>> Search(Func<SearchDescriptor<SiteModel>, ISearchRequest> selector);
+        Task<string> Create(CreateSiteModel createSiteModel);
+        Task Edit(EditSiteModel editSiteModel);
+        Task Share(EditSiteACLsModel editSiteACLsModel);
+        Task Delete(string Id);
+        Task<SiteModel> Get(string Id);
+        Task<List<SiteLogModel>> GetLogs(string Id);
+        Task<List<SiteModel>> Search(Func<SearchDescriptor<SiteModel>, ISearchRequest> selector);
     }
 
     /// <summary>
@@ -34,7 +34,7 @@ namespace nowguaClient.Services
         /// </summary>
         /// <param name="createSiteModel">Modèle de création du site</param>
         /// <returns>Identifiant du site créé</returns>
-        public Task<APIResponse<string>> Create(CreateSiteModel createSiteModel)
+        public Task<string> Create(CreateSiteModel createSiteModel)
         {
             return _apiService.Post<CreateSiteModel, string>("", createSiteModel);
         }
@@ -44,7 +44,7 @@ namespace nowguaClient.Services
         /// </summary>
         /// <param name="Id">Identifiant du site à supprimer</param>
         /// <returns></returns>
-        public Task<APIResponse> Delete(string Id)
+        public Task Delete(string Id)
         {
             return _apiService.Delete($"{Id}");
         }
@@ -54,7 +54,7 @@ namespace nowguaClient.Services
         /// </summary>
         /// <param name="editSiteModel">Modèle d'édition du site</param>
         /// <returns></returns>
-        public Task<APIResponse> Edit(EditSiteModel editSiteModel)
+        public Task Edit(EditSiteModel editSiteModel)
         {
             return _apiService.Put<EditSiteModel>("", editSiteModel);
         }
@@ -64,7 +64,7 @@ namespace nowguaClient.Services
         /// </summary>
         /// <param name="editSiteACLsModel">Modèle de modification des données de partage</param>
         /// <returns></returns>
-        public Task<APIResponse> Share(EditSiteACLsModel editSiteACLsModel)
+        public Task Share(EditSiteACLsModel editSiteACLsModel)
         {
             return _apiService.Put<EditSiteACLsModel>("acls", editSiteACLsModel);
         }
@@ -74,7 +74,7 @@ namespace nowguaClient.Services
         /// </summary>
         /// <param name="Id">Identifiant du site</param>
         /// <returns>SiteModel</returns>
-        public Task<APIResponse<SiteModel>> Get(string Id)
+        public Task<SiteModel> Get(string Id)
         {
             return _apiService.Get<SiteModel>($"{Id}");
         }
@@ -84,7 +84,7 @@ namespace nowguaClient.Services
         /// </summary>
         /// <param name="Id">Identifiant du site</param>
         /// <returns>Liste de logs</returns>
-        public Task<APIResponse<List<SiteLogModel>>> GetLogs(string Id)
+        public Task<List<SiteLogModel>> GetLogs(string Id)
         {
             return _apiService.Get<List<SiteLogModel>>($"{Id}/logs");
         }
@@ -94,12 +94,12 @@ namespace nowguaClient.Services
         /// </summary>
         /// <param name="selector">Query ElasticSearch</param>
         /// <returns>Liste des sites correspondant à la recherche</returns>
-        public Task<APIResponse<List<SiteModel>>> Search(Func<SearchDescriptor<SiteModel>, ISearchRequest> selector)
+        public Task<List<SiteModel>> Search(Func<SearchDescriptor<SiteModel>, ISearchRequest> selector)
         {
             APIResponse<List<SiteModel>> r = new APIResponse<List<SiteModel>>();
             r.Result = _searchService.Search<SiteModel>(selector);
 
-            return Task.FromResult(r);
+            return Task.FromResult(r.Result);
         }
     }
 }

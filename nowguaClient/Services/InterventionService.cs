@@ -10,12 +10,12 @@ namespace nowguaClient.Services
 {
     public interface IInterventionService : IBaseService
     {
-        Task<APIResponse<string>> Create(CreateInterventionModel createInterventionModel);
-        Task<APIResponse> Cancel(string Id, CancelInterventionModel cancelInterventionModel);
-        Task<APIResponse<InterventionModel>> Get(string Id);
-        Task<APIResponse<ReportModel>> GetReport(string Id);
-        Task<APIResponse<List<InterventionLogModel>>> GetLogs(string Id);
-        Task<APIResponse<List<InterventionModel>>> Search(Func<SearchDescriptor<InterventionModel>, ISearchRequest> selector);
+        Task<string> Create(CreateInterventionModel createInterventionModel);
+        Task Cancel(string Id, CancelInterventionModel cancelInterventionModel);
+        Task<InterventionModel> Get(string Id);
+        Task<ReportModel> GetReport(string Id);
+        Task<List<InterventionLogModel>> GetLogs(string Id);
+        Task<List<InterventionModel>> Search(Func<SearchDescriptor<InterventionModel>, ISearchRequest> selector);
     }
 
     /// <summary>
@@ -34,7 +34,7 @@ namespace nowguaClient.Services
         /// </summary>
         /// <param name="createInterventionModel"></param>
         /// <returns>Identifiant de l'intervention créée</returns>
-        public Task<APIResponse<string>> Create(CreateInterventionModel createInterventionModel)
+        public Task<string> Create(CreateInterventionModel createInterventionModel)
         {
             return _apiService.Post<CreateInterventionModel, string>("", createInterventionModel);
         }
@@ -45,7 +45,7 @@ namespace nowguaClient.Services
         /// <param name="Id">Identifiant de l'intervention à annuler</param>
         /// <param name="cancelInterventionModel">Modèle du cancel</param>
         /// <returns></returns>
-        public Task<APIResponse> Cancel(string Id, CancelInterventionModel cancelInterventionModel)
+        public Task Cancel(string Id, CancelInterventionModel cancelInterventionModel)
         {
             return _apiService.Put<CancelInterventionModel>($"{_baseRoot}/{Id}/cancel", cancelInterventionModel);
         }
@@ -55,7 +55,7 @@ namespace nowguaClient.Services
         /// </summary>
         /// <param name="Id">Identifiant de l'intervention à récupérer</param>
         /// <returns>InterventionModel</returns>
-        public Task<APIResponse<InterventionModel>> Get(string Id)
+        public Task<InterventionModel> Get(string Id)
         {
             return _apiService.Get<InterventionModel>(Id);
         }
@@ -65,7 +65,7 @@ namespace nowguaClient.Services
         /// </summary>
         /// <param name="Id">Identifiant de l'intervention à récupérer</param>
         /// <returns>ReportModel</returns>
-        public Task<APIResponse<ReportModel>> GetReport(string Id)
+        public Task<ReportModel> GetReport(string Id)
         {
             return _apiService.Get<ReportModel>($"{_baseRoot}/{Id}/report");
         }
@@ -75,7 +75,7 @@ namespace nowguaClient.Services
         /// </summary>
         /// <param name="Id">Identifiant de l'intervention à récupérer</param>
         /// <returns>InterventionLogModel</returns>
-        public Task<APIResponse<List<InterventionLogModel>>> GetLogs(string Id)
+        public Task<List<InterventionLogModel>> GetLogs(string Id)
         {
             return _apiService.Get<List<InterventionLogModel>>($"{_baseRoot}/{Id}/logs");
         }
@@ -85,12 +85,12 @@ namespace nowguaClient.Services
         /// </summary>
         /// <param name="selector">Query ElasticSearch</param>
         /// <returns>Liste des interventions correspondantes à la recherche</returns>
-        public Task<APIResponse<List<InterventionModel>>> Search(Func<SearchDescriptor<InterventionModel>, ISearchRequest> selector)
+        public Task<List<InterventionModel>> Search(Func<SearchDescriptor<InterventionModel>, ISearchRequest> selector)
         {
             APIResponse<List<InterventionModel>> r = new APIResponse<List<InterventionModel>>();
             r.Result = _searchService.Search<InterventionModel>(selector);
 
-            return Task.FromResult(r);
+            return Task.FromResult(r.Result);
         }
     }
 }
