@@ -2,9 +2,9 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/ttnbnp2o86rq841t?svg=true)](https://ci.appveyor.com/project/mabelanski/nowgua-net)
 
-[![AppVeyor tests](https://img.shields.io/badge/test-ok-green.svg)](https://ci.appveyor.com/project/mabelanski/nowgua-net)
+[![AppVeyor tests](https://img.shields.io/appveyor/tests/NZSmartie/coap-net-iu0to.svg)](https://ci.appveyor.com/project/mabelanski/nowgua-net)
 
-[![NuGet](https://img.shields.io/nuget/v/TW.Resfit.Core.svg)](https://www.nuget.org/packages/NowguaLibrary.Nowgua/)
+[![NuGet](https://img.shields.io/nuget/v/NowguaLibrary.Nowgua.svg)](https://www.nuget.org/packages/NowguaLibrary.Nowgua/)
 
 <img src="https://www.nowgua.com/wp-content/uploads/2017/12/logo-nowgua-B-to-C-déclinaison.png" height="48px" alt="Firebase"/><br/>
 
