@@ -2,12 +2,34 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.5</TargetFramework>
+    <PackageId>NowguaLibrary.Nowgua</PackageId>
+    <Authors>Nowgua</Authors>
+    <Description>Client library to control the platform Nowgua</Description>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <Copyright>Copyright 2017 (c) NowGua All rights reserved.</Copyright>
+    <PackageTags>Nowgua library</PackageTags>
+    <RepositoryUrl>https://github.com/nowgua/nowgua-net</RepositoryUrl>
+    <Version>1.0.3</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Package\nowguaClient.xml</DocumentationFile>
+    <OutputPath>bin\Package\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile></DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="NEST">
       <Version>5.6.0</Version>
     </PackageReference>
+    <PackageReference Include="NuGet.CommandLine" Version="4.4.1" />
   </ItemGroup>
 
 </Project>
