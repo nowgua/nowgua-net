@@ -4,6 +4,8 @@
 
 [![AppVeyor tests](https://img.shields.io/appveyor/tests/NZSmartie/coap-net-iu0to.svg)](https://ci.appveyor.com/project/mabelanski/nowgua-net)
 
+[![NuGet](https://img.shields.io/nuget/v/Nuget.Core.svg)](https://www.nuget.org/packages/NowguaLibrary.Nowgua/)
+
 <img src="https://www.nowgua.com/wp-content/uploads/2017/12/logo-nowgua-B-to-C-déclinaison.png" height="48px" alt="Firebase"/><br/>
 
 ## Fonctionnalités
