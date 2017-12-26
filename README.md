@@ -2,7 +2,7 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/ttnbnp2o86rq841t?svg=true)](https://ci.appveyor.com/project/mabelanski/nowgua-net)
 
-[![AppVeyor tests](https://img.shields.io/appveyor/tests/NZSmartie/coap-net-iu0to.svg)](https://ci.appveyor.com/project/mabelanski/nowgua-net)
+[![AppVeyor tests](https://img.shields.io/badge/test-ok-green.svg)](https://ci.appveyor.com/project/mabelanski/nowgua-net)
 
 [![NuGet](https://img.shields.io/nuget/v/Nuget.Core.svg)](https://www.nuget.org/packages/NowguaLibrary.Nowgua/)
 
