@@ -22,9 +22,6 @@ build:
   verbosity: minimal
 
 
-after_build:
-- cd C:\projects\nowgua-net\nowguaClient\bin\Package
-- ls
  
 artifacts:
 - path: 'nowguaClient\bin\Package\*.nupkg'
@@ -33,7 +30,7 @@ artifacts:
 
 deploy:
 - provider: Environment
-  name: Nowgua-net
+  name: nowgua-net
   on: 
     appveyor_repo_tag: false 
 
