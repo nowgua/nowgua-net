@@ -10,19 +10,18 @@ namespace nowguaClient.Services
 {
     public interface IWebHookService : IBaseService
     {
-        Task<APIResponse<string>> Create(CreateWebHookModel createWebHookModel);
-        Task<APIResponse> Edit(EditWebHookModel editWebHookModel);
-        Task<APIResponse> Delete(string Id);
-        APIResponse<List<WebHookModel>> List();
+        Task<string> Create(CreateWebHookModel createWebHookModel);
+        Task Delete(string Id);
+        Task<List<WebHookModel>> List();
     }
 
     /// <summary>
     /// Gestion des webhooks
     /// </summary>
-    public class WebHookService : BaseService, IWebHookService
+    public class WebHookService : BaseService<WebHookModel>, IWebHookService
     {
-        public WebHookService(ApiService ApiService, SearchService SearchService)
-            : base(ApiService, SearchService, "api/1.0/webhooks/")
+        public WebHookService(IApiService ApiService, ISearchService SearchService)
+            : base(ApiService, SearchService, "/api/1.0/webhooks")
         {
 
         }
@@ -32,9 +31,10 @@ namespace nowguaClient.Services
         /// </summary>
         /// <param name="createWebHookModel">Modèle de création du webhook</param>
         /// <returns>Identifiant du webhook créé</returns>
-        public Task<APIResponse<string>> Create(CreateWebHookModel createWebHookModel)
+        public Task<string> Create(CreateWebHookModel createWebHookModel)
         {
-            throw new NotImplementedException();
+            return _apiService.Post<CreateWebHookModel, LabelIdModel<string>>($"{BaseRoot}", createWebHookModel)
+                        .ContinueWith(r => r.Result.Id);
         }
 
         /// <summary>
@@ -42,19 +42,9 @@ namespace nowguaClient.Services
         /// </summary>
         /// <param name="Id">Identifiant du webhook à supprimer</param>
         /// <returns></returns>
-        public Task<APIResponse> Delete(string Id)
+        public Task Delete(string Id)
         {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Modification d'un webhook
-        /// </summary>
-        /// <param name="editWebHookModel">Modèle de modification du webhook</param>
-        /// <returns></returns>
-        public Task<APIResponse> Edit(EditWebHookModel editWebHookModel)
-        {
-            throw new NotImplementedException();
+            return _apiService.Delete($"{BaseRoot}/{Id}");
         }
 
         /// <summary>
@@ -62,9 +52,9 @@ namespace nowguaClient.Services
         /// </summary>
         /// <param name="selector"></param>
         /// <returns>Liste de webhooks</returns>
-        public APIResponse<List<WebHookModel>> List()
+        public Task<List<WebHookModel>> List()
         {
-            throw new NotImplementedException();
+            return _apiService.Get<List<WebHookModel>>($"{BaseRoot}");
         }
     }
 }

@@ -4,12 +4,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using nowguaClient.Models.Users;
 
 namespace nowguaClient.Helpers
 {
     public interface ISearchService
     {
         List<TModel> Search<TModel>(Func<SearchDescriptor<TModel>, ISearchRequest> selector) where TModel : class;
+        void Connect();
+        string TypeName<TModel>() where TModel : class;
     }
 
     /// <summary>
@@ -17,12 +20,14 @@ namespace nowguaClient.Helpers
     /// </summary>
     public class SearchService : ISearchService
     {
-        private ElasticSearchConfiguration _elasticSearchConfiguration;
+        private IApiService _apiService { get; }
         private ElasticClient _elasticClient;
 
-        public SearchService(ElasticSearchConfiguration ElasticSearchConfiguration)
+        public bool Connected { get; set; }
+
+        public SearchService(IApiService ApiService)
         {
-            this._elasticSearchConfiguration = ElasticSearchConfiguration;
+            this._apiService = ApiService;
         }
 
         /// <summary>
@@ -34,12 +39,36 @@ namespace nowguaClient.Helpers
         public List<TModel> Search<TModel>(Func<SearchDescriptor<TModel>, ISearchRequest> selector) where TModel : class
         {
             Connect();
-            return _elasticClient.Search<TModel>(selector).Hits.Select(item => item.Source).ToList();
+            var r  = _elasticClient.Search<TModel>(selector);
+
+            return r.Hits.Select(item => item.Source).ToList();
         }
 
+        /// <summary>
+        /// Initialisation de la connection à ElasticSearch
+        /// </summary>
         public void Connect()
         {
-            throw new NotImplementedException();
+            if (!Connected)
+            {
+                var u = _apiService.Get<UserMeModel>("/api/1.0/users/me");
+                u.Wait();
+
+                _apiService.GlobalConfiguration.ElasticConnectionString = _apiService.GlobalConfiguration.ElasticConnectionString
+                                                                    .Replace("https://", $"https://user_{u.Result.Id}:{u.Result.ELKPassword}@");
+
+                var settings = new ConnectionSettings(new Uri(_apiService.GlobalConfiguration.ElasticConnectionString))
+                                        .DefaultIndex(_apiService.GlobalConfiguration.ElasticIndex);
+
+                _elasticClient = new ElasticClient(settings);
+
+                Connected = true;
+            }
+        }
+
+        public string TypeName<TModel>() where TModel : class
+        {
+            return typeof(TModel).Name.Replace("Model", "").ToLower() + "s";
         }
     }
 }

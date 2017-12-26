@@ -11,6 +11,11 @@ namespace nowguaClient.Helpers
 {
     public interface IApiService
     {
+        NowguaConnectionSettings ConnectionSettings { get; set; }
+        GlobalConfiguration GlobalConfiguration { get; set; }
+        string Token { get; set; }
+        DateTime TokenExpiresDate { get; set; }
+
         Task<TResult> Get<TResult>(string APIOperation);
         Task<TResult> Post<TModel, TResult>(string APIOperation, TModel Model);
         Task Put(string APIOperation);
@@ -33,7 +38,7 @@ namespace nowguaClient.Helpers
         /// <summary>
         /// <param name="ConnectionSettings">Configuration de l'app nowgua</param>
         /// </summary>
-        public NowguaConfiguration NowguaConfiguration { get; set; }
+        public GlobalConfiguration GlobalConfiguration { get; set; }
 
         /// <summary>
         /// Token de connexion
@@ -165,24 +170,22 @@ namespace nowguaClient.Helpers
         /// <summary>
         /// Connexion à l'API
         /// </summary>
-        public AuthConfiguration InitAuthProvider()
+        public GlobalConfiguration InitAuthProvider()
         {
             var httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri(this.ConnectionSettings.ApiBaseURL);
 
-            var r = httpClient.GetAsync("/api/1.0/appsettings/auth0configuration")
-                        .ContinueWith(resp => new APIResponse<AuthConfiguration>(resp.Result));
+            var r = httpClient.GetAsync("/api/1.0/appsettings/globalConfiguration")
+                        .ContinueWith(resp => new APIResponse<GlobalConfiguration>(resp.Result));
 
             r.Wait();
 
             if (r.Result.Error != null)
                 throw new Exception(r.Result.Error.Code + " " + r.Result.Error.Message);
 
-            if (this.NowguaConfiguration == null)
-                this.NowguaConfiguration = new NowguaConfiguration();
 
-            this.NowguaConfiguration.Auth = r.Result.Result;
-            return this.NowguaConfiguration.Auth;
+            this.GlobalConfiguration = r.Result.Result;
+            return this.GlobalConfiguration;
         }
 
         /// <summary>
@@ -218,12 +221,12 @@ namespace nowguaClient.Helpers
         public AuthToken GenerateJwtToken()
         {
             var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(this.NowguaConfiguration.Auth.BaseUrl);
+            httpClient.BaseAddress = new Uri(this.GlobalConfiguration.BaseUrl);
 
             var httpContent = new StringContent(JsonConvert.SerializeObject(
                                                     new AuthModel(this.ConnectionSettings.ClientId
                                                                     , this.ConnectionSettings.ClientSecret
-                                                                    , this.NowguaConfiguration.Auth.Audience
+                                                                    , this.GlobalConfiguration.Audience
                                                                  )
                                                 )
                                                 , Encoding.UTF8

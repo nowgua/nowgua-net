@@ -83,7 +83,7 @@ namespace nowguaClientTest
             var auth = api.InitAuthProvider();
 
             Assert.NotNull(auth);
-            Assert.NotNull(api.NowguaConfiguration);
+            Assert.NotNull(api.GlobalConfiguration);
             Assert.Equal("https://api.preprod.nowgua.com", auth.Audience);
             Assert.Equal("userdb-prod", auth.ClientConnexion);
         }

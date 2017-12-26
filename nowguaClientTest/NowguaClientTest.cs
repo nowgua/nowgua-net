@@ -1,4 +1,5 @@
-﻿using System;
+﻿using nowguaClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,12 +8,18 @@ using Xunit;
 
 namespace nowguaClientTest
 {
-    public class NowguaClientTest
+    public class NowguaClientTest : BaseTest
     {
         [Fact]
-        public void ConstructorTest()
+        public async void ConstructorTest()
         {
+            var client = new NowguaClient(ConnectionSettings);
 
+            Assert.NotNull(client.Users);
+            Assert.NotNull(client.Files);
+            Assert.NotNull(client.Interventions);
+            Assert.NotNull(client.Sites);
+            Assert.NotNull(client.WebHooks);
         }
     }
 }

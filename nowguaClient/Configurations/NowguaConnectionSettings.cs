@@ -31,13 +31,4 @@ namespace nowguaClient.Configurations
             this.ClientSecret = ClientSecret;
         }
     }
-
-    /// <summary>
-    /// Information de configuration nowgua
-    /// </summary>
-    public class NowguaConfiguration
-    {
-        public ElasticSearchConfiguration ElasticSearch { get; set; }
-        public AuthConfiguration Auth { get; set; }
-    }
 }

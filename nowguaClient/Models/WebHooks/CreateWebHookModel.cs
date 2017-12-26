@@ -8,7 +8,7 @@
         /// <summary>
         /// Type d'évènement : Incident ou Site
         /// </summary>
-        public string Type { get; set; }
+        public WebHookType Type { get; set; }
 
         /// <summary>
         /// URL vers lequel sera posté l'évènement

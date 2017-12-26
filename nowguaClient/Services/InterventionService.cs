@@ -21,10 +21,10 @@ namespace nowguaClient.Services
     /// <summary>
     /// Gestion des interventions
     /// </summary>
-    public class InterventionService : BaseService, IInterventionService
+    public class InterventionService : BaseService<InterventionModel>, IInterventionService
     {
-        public InterventionService(ApiService ApiService, SearchService SearchService) 
-            : base(ApiService, SearchService, "api/1.0/interventions")
+        public InterventionService(IApiService ApiService, ISearchService SearchService) 
+            : base(ApiService, SearchService, "/api/1.0/interventions")
         {
 
         }
@@ -36,7 +36,7 @@ namespace nowguaClient.Services
         /// <returns>Identifiant de l'intervention créée</returns>
         public Task<string> Create(CreateInterventionModel createInterventionModel)
         {
-            return _apiService.Post<CreateInterventionModel, string>("", createInterventionModel);
+            return _apiService.Post<CreateInterventionModel, string>($"{BaseRoot}", createInterventionModel);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace nowguaClient.Services
         /// <returns></returns>
         public Task Cancel(string Id, CancelInterventionModel cancelInterventionModel)
         {
-            return _apiService.Put<CancelInterventionModel>($"{_baseRoot}/{Id}/cancel", cancelInterventionModel);
+            return _apiService.Put<CancelInterventionModel>($"{BaseRoot}/{Id}/cancel", cancelInterventionModel);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace nowguaClient.Services
         /// <returns>InterventionModel</returns>
         public Task<InterventionModel> Get(string Id)
         {
-            return _apiService.Get<InterventionModel>(Id);
+            return _apiService.Get<InterventionModel>($"{BaseRoot}/{Id}");
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace nowguaClient.Services
         /// <returns>ReportModel</returns>
         public Task<ReportModel> GetReport(string Id)
         {
-            return _apiService.Get<ReportModel>($"{_baseRoot}/{Id}/report");
+            return _apiService.Get<ReportModel>($"{BaseRoot}/{Id}/report");
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace nowguaClient.Services
         /// <returns>InterventionLogModel</returns>
         public Task<List<InterventionLogModel>> GetLogs(string Id)
         {
-            return _apiService.Get<List<InterventionLogModel>>($"{_baseRoot}/{Id}/logs");
+            return _apiService.Get<List<InterventionLogModel>>($"{BaseRoot}/{Id}/logs");
         }
 
         /// <summary>
@@ -87,10 +87,9 @@ namespace nowguaClient.Services
         /// <returns>Liste des interventions correspondantes à la recherche</returns>
         public Task<List<InterventionModel>> Search(Func<SearchDescriptor<InterventionModel>, ISearchRequest> selector)
         {
-            APIResponse<List<InterventionModel>> r = new APIResponse<List<InterventionModel>>();
-            r.Result = _searchService.Search<InterventionModel>(selector);
+            List<InterventionModel> interventions = _searchService.Search<InterventionModel>(selector);
 
-            return Task.FromResult(r.Result);
+            return Task.FromResult(interventions);
         }
     }
 }
