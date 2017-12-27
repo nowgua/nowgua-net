@@ -1,5 +1,6 @@
 ﻿using Nest;
 using nowguaClient.Helpers;
+using nowguaClient.Models;
 using nowguaClient.Models.Interventions;
 using System;
 using System.Collections.Generic;
@@ -36,7 +37,7 @@ namespace nowguaClient.Services
         /// <returns>Identifiant de l'intervention créée</returns>
         public Task<string> Create(CreateInterventionModel createInterventionModel)
         {
-            return _apiService.Post<CreateInterventionModel, string>($"{BaseRoot}", createInterventionModel);
+            return _apiService.Post<CreateInterventionModel, LabelIdModel<string>>($"{BaseRoot}", createInterventionModel).ContinueWith(r => r.Result.Id);
         }
 
         /// <summary>

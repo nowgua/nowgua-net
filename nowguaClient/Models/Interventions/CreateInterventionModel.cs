@@ -1,4 +1,6 @@
-﻿namespace nowguaClient.Models.Interventions
+﻿using System;
+
+namespace nowguaClient.Models.Interventions
 {
     /// <summary>
     /// Modèle de création d'une intervention
@@ -34,5 +36,22 @@
         /// Rayon de recherche des agents (en km)
         /// </summary>
         public long Radius { get; set; }
+
+        /// <summary>
+        /// Création d'une intervention
+        /// </summary>
+        /// <param name="SiteId">Identifiant du site nowgua</param>
+        /// <param name="AlarmType">Identifiant de l'alarme</param>
+        /// <param name="AlarmDate">Date heure de l'alarme</param>
+        /// <param name="Commentaire">Commentaire ou toutes autres informations pertinentes à transmettre</param>
+        public CreateInterventionModel(string SiteId, int AlarmType, DateTime AlarmDate, string Commentaire = "")
+        {
+            TimeSpan elapsedTime = AlarmDate - new DateTime(1970, 1, 1, 0, 0, 0);
+            this.AlarmDate = (long)elapsedTime.TotalMilliseconds;
+            this.Site = new LabelIdModel<string> { Id = SiteId };
+            this.AlarmType = new LabelIdModel<int> { Id =AlarmType };
+            this.Commentaire = Commentaire;
+            this.Radius = 60;
+        }
     }
 }

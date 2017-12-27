@@ -35,6 +35,11 @@ namespace nowguaClient.Models.Sites
         public AddressModel Address { get; set; }
 
         /// <summary>
+        /// true: Indique si il s'agit d'une adresse Google, false : adresse manuelle
+        /// </summary>
+        public bool AddressType { get; set; }
+
+        /// <summary>
         /// Prix Max de l'intervention
         /// </summary>
         public float MaxInterventionCost { get; set; }

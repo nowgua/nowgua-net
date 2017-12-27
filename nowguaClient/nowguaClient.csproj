@@ -4,7 +4,7 @@
     <TargetFramework>netstandard1.5</TargetFramework>
     <PackageId>nowgua-net</PackageId>
     <Authors>Nowgua</Authors>
-    <Description>Client library to control the platform Nowgua</Description>
+    <Description>Client library for nowgua platform</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes></PackageReleaseNotes>
     <Copyright>Copyright 2017 (c) NowGua All rights reserved.</Copyright>

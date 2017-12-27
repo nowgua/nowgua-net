@@ -7,7 +7,7 @@ namespace nowguaClient.Services
 {
     public interface IBaseService
     {
-
+        string SearchTypeName { get; }
     }
 
     public class BaseService<TModel> : IBaseService where TModel : class

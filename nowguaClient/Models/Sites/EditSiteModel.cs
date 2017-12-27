@@ -1,6 +1,7 @@
 ﻿using nowguaClient.Models;
 using nowguaClient.Models.Interventions;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace nowguaClient.Models.Sites
 {
@@ -83,5 +84,25 @@ namespace nowguaClient.Models.Sites
         /// Liste des instructions
         /// </summary>
         public List<LabelListModel<int, object, List<string>>> Instructions { get; set; }
+
+        public static implicit operator EditSiteModel(SiteModel Model)
+        {
+            EditSiteModel editModel = new EditSiteModel();
+            editModel.Name = Model.Name;
+            editModel.TransmitterNumber = Model.TransmitterNumber;
+            editModel.Id = Model.Id;
+            editModel.Type = new LabelIdModel<int> { Id = Model.Type.Id };
+            editModel.Address = new Address(Model.Address.Text, Model.Address.Location.Lat, Model.Address.Location.Lon);
+            editModel.AddressType = Model.AddressType;
+            editModel.MaxInterventionCost = Model.MaxInterventionCost;
+            editModel.MaxDelay = Model.MaxDelay;
+            editModel.Recognition = new EditSiteRecognition { Access = Model.Recognition.Access, ExitInformations = Model.Recognition.ExitInformations, Pictures = Model.Recognition.Pictures.Select(p => p.Id).ToList() };
+            editModel.AccountBilling = Model.AccountBilling;
+            editModel.Notes = Model.Notes;
+            editModel.Contacts = Model.Contacts;
+            editModel.GroupNotify = new LabelIdModel<int> { Id = Model.GroupNotify.Id };
+
+            return editModel;
+        }
     }
 }

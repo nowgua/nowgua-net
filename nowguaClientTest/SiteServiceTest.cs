@@ -1,11 +1,7 @@
 ﻿using nowguaClient;
 using nowguaClient.Models.Interventions;
 using nowguaClient.Models.Sites;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using Xunit;
 
 namespace nowguaClientTest
@@ -13,9 +9,9 @@ namespace nowguaClientTest
     public class SiteServiceTest : BaseTest
     {
         [Fact]
-        public async void CreateGetSearchDeleteTest()
+        public async void ScenarioTest()
         {
-            var client = new NowguaClient(ConnectionSettings);
+            var ng = new NowguaClient(ConnectionSettings);
 
             // Création d'un site
             var createModel = new CreateSiteModel("Site de Test", rd.Next(1000, 10000).ToString(), 2);
@@ -38,23 +34,50 @@ namespace nowguaClientTest
             createModel.Contacts.Add("Albert", "SMITH", "albert.smith@gmail.com", "+33600000000", true); // reception automatique des rapports d'intervention du site
             createModel.Contacts.Add("Henry", "KESTREL", "h.kestrel@outlook.com", "+33600000000", false);
 
-            string siteId = await client.Sites.Create(createModel);
+            string siteId = await ng.Sites.Create(createModel);
             Assert.NotEmpty(siteId);
 
             // Récupération des informations du site 
-            var site = await client.Sites.Get(siteId);
-
+            var site = await ng.Sites.Get(siteId);
             Assert.NotNull(site);
             Assert.Equal(createModel.Name, site.Name);
             Assert.Equal(createModel.TransmitterNumber, site.TransmitterNumber);
             Assert.Equal(createModel.Address.Text, site.Address.Text);
 
             // Recherche d'un site via numéro télétransmeteur
-            var site2 = client.Sites.Search(site.TransmitterNumber);
+            var site2 = ng.Sites.Search(site.TransmitterNumber);
             Assert.NotNull(site);
             Assert.Equal(createModel.Name, site.Name);
             Assert.Equal(createModel.TransmitterNumber, site.TransmitterNumber);
             Assert.Equal(createModel.Address.Text, site.Address.Text);
+
+            // Modification du site 
+            EditSiteModel editSiteModel = await ng.Sites.Get(siteId);
+            editSiteModel.Name = "Nouveau Nom";
+            editSiteModel.TransmitterNumber = "T0123456789";
+            editSiteModel.Address = new Address("229 Boulevard Alsace-Lorraine, Rosny-sous-Bois, France", 48.882486, 2.494292);
+
+            await ng.Sites.Edit(editSiteModel);
+
+            site = await ng.Sites.Get(siteId);
+            Assert.NotNull(site);
+            Assert.Equal(editSiteModel.Name, site.Name);
+            Assert.Equal(editSiteModel.TransmitterNumber, site.TransmitterNumber);
+            Assert.Equal(editSiteModel.Address.Text, site.Address.Text);
+
+            // Get des logs
+            var logs = await ng.Sites.GetLogs(siteId);
+            Assert.NotNull(logs);
+            Assert.NotEmpty(logs);
+
+            // Suppression du site 
+            await ng.Sites.Delete(siteId);
+
+            Thread.Sleep(3000);
+            var sites = await ng.Sites.Search(s => s.Type(ng.Sites.SearchTypeName).Query(q => q.MatchAll()).Take(1000));
+            Assert.NotNull(sites);
+            Assert.NotEmpty(sites);
+            Assert.False(sites.Exists(s => s.Id == siteId));
         }
     }
 }
