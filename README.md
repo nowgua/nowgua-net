@@ -8,11 +8,18 @@
 * Gestion des sites 
 * Gestion des intervetions
 * Moteur de recherche
-* Download des images et vidéos du rapport
+* Download Images/Vidéos et Rapport
 * WebHook
 
 ## Pré-requis
-Vous devez disposer d'un compte utilisateur à nowgua http://manage.nowgua.com. Il faut ensuite créer un compte utilisateur de type API et récupérer les champs "ClientId" et "ClientSecret"
+Vous devez disposer d'un compte utilisateur à nowgua http://manage.nowgua.com. Il faut ensuite créer un compte utilisateur de type API et récupérer les champs "ClientId" et "ClientSecret". 
+
+Pour celà  : 
+- Cliquez sur Menu => Utilisateur => Création
+- Indiquer "Créer un utilisateur API?" à 'Oui'
+- Renseignez le reste du formulaire
+- Dirigez-vous dans la fiche de l'utilisateur créé 
+- Puis dans le widget "Informations d'authentification utilisateur API" récupérez vos clés
 
 ## Guide de Démarrage
 
@@ -30,10 +37,11 @@ Vous devez disposer d'un ClientId et ClientSecret pour vous connecter à l'API
 
 ```csharp
 var settings = new NowguaConnectionSettings("https://nowgua-prod-api.azurewebsites.net",
-                                            "fsxCvlvhP2GkC82ihU3iJ0HljNpICAtn",
-                                            "w-eyX4Fn0FxObG4TXDRzq8P9UV9OeVGq02bgSvq7uOrLxVYwbKIfPXQPwaWSRktM");
+                                            "CLIENT-ID",
+                                            "CLIENT-SECRET");
 var ng = new NowguaClient(settings);
 ```
+
 
 ### Gestion des sites 
 
@@ -105,7 +113,7 @@ await ng.Sites.Edit(editSiteModel);
 ```
 
 
-### Gestion des intervetions
+### Gestion des interventions
 
 **Création d'une intervention**
 
@@ -159,7 +167,7 @@ ou recherchons les interventions créées sur un site en particulier et avec un 
 
 var interventions = await ng.Interventions.Search(i => i.Type(ng.Interventions.SearchTypeName)
                                                                             .Query(q => q
-                                                                                .Term(t => t.Site.TransmitterNumber, TransmetterNumber)
+                                                                                .Term(t => t.Site.TransmitterNumber, "3241")
                                                                                 && q.Term(t => t.AlarmType.Id, 1)
                                                                             ).Take(1000)
                                                                 );
@@ -174,5 +182,98 @@ Attention par défaut le nombre d'éléments remontés est limité à 10 (TOP 10
 var sites = await ng.Sites.Search(s => s.Type(ng.Sites.SearchTypeName).Query(q => q.MatchAll()).Take(1000));
 
 ```
+
+### Download Images/Vidéos et Rapport
+
+Vous pouvez télécharger les images ou vidéos présentes dans les rapports d'intervention ou dans les sites par exemple. 
+Prenons l'exemple du rapport :
+
+
+```csharp
+
+var report = await ng.Interventions.GetReport(interventionId);
+
+foreach (var picture in report.Pictures)
+{
+	Console.WriteLine($"Download - FileName: {picture.FileName} - ContentType: {picture.ContentType}");
+	
+	// Download du fichier image
+	var filebyte = await ng.Files.Download(picture.Id);
+	
+	// Sauvegarde sur le disque
+	File.WriteAllBytes(picture.FileName, filebyte);
+}
+
+
+```
+
+ou télécharger le rapport d'une intervention au format PDF 
+
+```csharp
+
+var report = await ng.Interventions.DownloadReport(interventionId);
+File.WriteAllBytes($"{interventionId}.pdf", report);
+
+```
+
+### WebHook
+
+Les webhook servent à notifier votre application qu'un événement a eu lieu. Ainsi, vous pouvez demander à ce que des notifications soient envoyées sur une page de votre choix pour vous aviser de divers événements survenus dans nowgua. 
+
+Je vais par exemple, m'abonner à tous les évènements de changements sur mes interventions
+
+```csharp
+var model = new CreateWebHookModel { Type = WebHookType.Intervention, URL = "https://api.monsite.com/key=d4s5qd4f8sf" };
+await ng.WebHooks.Create(model);
+
+```
+
+Ainsi dès qu'une intervention sera créée, affectée ou peu importe ... je recevrai un POST sur https://api.monsite.com/key=d4s5qd4f8sf avec le message concerné.
+
+Voici la liste des messages : 
+
+<table>
+	<tr>
+		<th>Evènement</th>		
+		<th>Message</th>
+	</tr>
+	<tr><td>Assignation</td>
+<td>
+</td>
+</tr>
+<tr><td>Confirmation</td>
+<td>
+</td>
+</tr>
+<tr><td>Départ vers site</td>
+<td>
+</td>
+</tr>
+<tr><td>Arrivé sur site</td>
+<td>
+</td>
+</tr>
+<tr><td>Tracking GPS</td>
+<td>
+</td>
+</tr>
+<tr><td>Mise à jour Rapport</td>
+<td>
+</td>
+</tr>
+<tr><td>Clôture</td>
+<td>
+</td>
+</tr>
+<tr><td>Annulation</td>
+<td>
+</td>
+</tr>
+<tr><td>Désaffectation</td>
+<td>
+
+</td>
+</tr>
+</table>
 
 
