@@ -233,47 +233,37 @@ Ainsi dès qu'une intervention sera créée, affectée ou peu importe ... je rec
 Voici la liste des messages : 
 
 <table>
-	<tr>
-		<th>Evènement</th>		
-		<th>Message</th>
-	</tr>
-	<tr><td>Assignation</td>
-<td>
-</td>
-</tr>
-<tr><td>Confirmation</td>
-<td>
-</td>
-</tr>
-<tr><td>Départ vers site</td>
-<td>
-</td>
-</tr>
-<tr><td>Arrivé sur site</td>
-<td>
-</td>
-</tr>
-<tr><td>Tracking GPS</td>
-<td>
-</td>
-</tr>
-<tr><td>Mise à jour Rapport</td>
-<td>
-</td>
-</tr>
-<tr><td>Clôture</td>
-<td>
-</td>
-</tr>
-<tr><td>Annulation</td>
-<td>
-</td>
-</tr>
-<tr><td>Désaffectation</td>
-<td>
-
-</td>
-</tr>
+<tr><th>Evènement</th><th>Nom</th><th>Model</th></tr>
+<tr><td>Création</td><td>Create</td><td>InterventionModel</td></tr>
+<tr><td>Assignation</td><td>Assign</td><td>InterventionModel</td></tr>
+<tr><td>Confirmation</td><td>Confirm</td><td>InterventionModel</td></tr>
+<tr><td>Départ vers site</td><td>Start</td><td>InterventionModel</td></tr>
+<tr><td>Arrivé sur site</td><td>ArrivedOnSite</td><td>InterventionModel</td></tr>
+<tr><td>Mise à jour Rapport</td><td>Report</td><td>ReportModel</td></tr>
+<tr><td>Fin Intervention</td><td>EndOfIntervention</td><td>InterventionModel</td></tr>
+<tr><td>Clôture</td><td>Close</td><td>InterventionModel</td></tr>
+<tr><td>Annulation</td><td>Cancel</td><td>InterventionModel</td></tr>
+<tr><td>Désaffectation</td><td>UnAssign</td><td>InterventionModel</td></tr>
 </table>
+
+Tous les messages sont typés en WebHookMessage qui contient le type de webhook, la date, le nom du message et le modèle. Vous pouvez récupérer les données du modèle grâce à la fonction .Parse<TModel>()
+
+```csharp
+
+[HttpPost()]
+public IActionResult YourActionOnController([FromBody] WebHookMessage message)
+{
+    if (message.Name == "Assign")
+    {
+    	// Récupération du message
+	var intervention = message.Parse<InterventionModel>();
+
+	var Agent = intervention.SecurityAgent.FullName;
+    }
+
+    return Ok();
+}
+
+```
 
 
