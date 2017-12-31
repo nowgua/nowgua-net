@@ -69,7 +69,11 @@ namespace nowguaClientTest
 
 			Assert.NotNull(intervention);
 			Assert.NotNull(interventionReport);
-			//Assert.Equal(intervention.Report, interventionReport);
+			/Assert.True(intervention.Report.Equals(interventionReport));
+			Assert.Equal(intervention.Report.Pictures.Count, interventionReport.Pictures.Count);
+			
+			Assert.Equal(intervention.Report.Videos.Count, interventionReport.Videos.Count);
+			Assert.Equal(intervention.Report.Instructions.Count, interventionReport.Instructions.Count);
 		}
 	}
 }
