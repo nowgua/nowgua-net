@@ -23,7 +23,8 @@ namespace nowguaClient.Helpers
         Task Delete(string APIOperation);
         Task Delete<TModel>(string APIOperation, TModel Model);
         Task<byte[]> Download(string APIOperation);
-    }
+		Task<byte[]> DownloadReport(string APIOperation);
+	}
 
     /// <summary>
     /// Gestion des appels API
@@ -167,10 +168,39 @@ namespace nowguaClient.Helpers
                         });
         }
 
-        /// <summary>
-        /// Connexion à l'API
-        /// </summary>
-        public GlobalConfiguration InitAuthProvider()
+		/// <summary>
+		/// Opération Download
+		/// </summary>
+		/// <param name="APIOperation">URL de l'API</param>
+		/// <returns></returns>
+		public async Task<byte[]> DownloadReport(string APIOperation)
+		{
+			var httpClient = GetHttpClient();
+			httpClient.Timeout = TimeSpan.FromMinutes(5);
+
+			var PDFUrl = await httpClient.GetAsync(APIOperation)
+						.ContinueWith(r =>
+						{
+							var content = r.Result.Content.ReadAsStringAsync();
+							content.Wait();
+
+							return content.Result;
+						});
+
+
+			Uri uri = new Uri(PDFUrl.Replace("\"",""));
+
+			var httpClient2 = new HttpClient();
+
+			byte[] pdfByte = await httpClient2.GetByteArrayAsync(uri);
+
+			return pdfByte;
+		}
+
+		/// <summary>
+		/// Connexion à l'API
+		/// </summary>
+		public GlobalConfiguration InitAuthProvider()
         {
             var httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri(this.ConnectionSettings.ApiBaseURL);

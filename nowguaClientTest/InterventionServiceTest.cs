@@ -2,6 +2,7 @@
 using nowguaClient.Models.Interventions;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,5 +47,29 @@ namespace nowguaClientTest
 
 
         }
-    }
+
+		[Fact]
+		public async void DownloadTest()
+		{
+			var ng = new NowguaClient(ConnectionSettings);
+			string InterventionId = "5a48a675b5dbf7157ce0cf17";
+			var intervention = await ng.Interventions.DownloadReport(InterventionId);
+
+			Assert.NotNull(intervention);
+			File.WriteAllBytes("test.pdf", intervention);
+		}
+
+		[Fact]
+		public async void GetReportTest()
+		{
+			var ng = new NowguaClient(ConnectionSettings);
+			string InterventionId = "5a48a675b5dbf7157ce0cf17";
+			var intervention = await ng.Interventions.Get(InterventionId);
+			var interventionReport = await ng.Interventions.GetReport(InterventionId);
+
+			Assert.NotNull(intervention);
+			Assert.NotNull(interventionReport);
+			//Assert.Equal(intervention.Report, interventionReport);
+		}
+	}
 }

@@ -17,7 +17,7 @@ namespace nowguaClient.Services
         Task<ReportModel> GetReport(string Id);
         Task<List<InterventionLogModel>> GetLogs(string Id);
         Task<List<InterventionModel>> Search(Func<SearchDescriptor<InterventionModel>, ISearchRequest> selector);
-        Task<byte[]> DownloadReport(string Id);
+		Task<byte[]> DownloadReport(string Id);
     }
 
     /// <summary>
@@ -101,7 +101,7 @@ namespace nowguaClient.Services
         /// <returns></returns>
         public Task<byte[]> DownloadReport(string Id)
         {
-            return _apiService.Download($"{BaseRoot}/export/pdf/{Id}");
+            return _apiService.DownloadReport($"{BaseRoot}/export/pdf/{Id}");
         }
     }
 }
