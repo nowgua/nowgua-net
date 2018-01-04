@@ -11,8 +11,8 @@ namespace nowguaClient
         ISiteService Sites { get; }
         IWebHookService WebHooks { get; }
         IUserService Users { get; }
-        
-    }
+		IGroupSiteService GroupsSites { get; }
+	}
 
     /// <summary>
     /// Client Nowgua 
@@ -47,11 +47,16 @@ namespace nowguaClient
         /// </summary>
         public IUserService Users { get; internal set; }
 
-        /// <summary>
-        /// Connexion à nowgua
-        /// </summary>
-        /// <param name="ConnectionSettings">Information de connexion à l'API Nowgua</param>
-        public NowguaClient(NowguaConnectionSettings ConnectionSettings)
+		/// <summary>
+		/// Gestion des groupes de site
+		/// </summary>
+		public IGroupSiteService GroupsSites { get; internal set; }
+
+		/// <summary>
+		/// Connexion à nowgua
+		/// </summary>
+		/// <param name="ConnectionSettings">Information de connexion à l'API Nowgua</param>
+		public NowguaClient(NowguaConnectionSettings ConnectionSettings)
         {
             this._apiService = new ApiService(ConnectionSettings);
             this._searchService = new SearchService(this._apiService);
@@ -61,6 +66,7 @@ namespace nowguaClient
             this.WebHooks = new WebHookService(_apiService, _searchService);
             this.Files = new FileService(_apiService, _searchService);
             this.Users = new UserService(_apiService, _searchService);
-        }
+			this.GroupsSites = new GroupSiteService(_apiService, _searchService);
+		}
     }
 }

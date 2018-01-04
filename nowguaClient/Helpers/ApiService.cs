@@ -181,18 +181,13 @@ namespace nowguaClient.Helpers
 			var PDFUrl = await httpClient.GetAsync(APIOperation)
 						.ContinueWith(r =>
 						{
-							var content = r.Result.Content.ReadAsStringAsync();
+							var content = r.Result.Content.ReadAsByteArrayAsync();
 							content.Wait();
 
 							return content.Result;
 						});
 
-
-			Uri uri = new Uri(PDFUrl.Replace("\"",""));
-
-			var httpClient2 = new HttpClient();
-
-			byte[] pdfByte = await httpClient2.GetByteArrayAsync(uri);
+			byte[] pdfByte = PDFUrl;
 
 			return pdfByte;
 		}

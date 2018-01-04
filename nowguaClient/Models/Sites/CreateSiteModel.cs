@@ -29,10 +29,15 @@ namespace nowguaClient.Models.Sites
         /// </summary>
         public LabelIdModel<string> ReportModel { get; set; }
 
-        /// <summary>
-        /// Adresse du site
-        /// </summary>
-        public Address Address { get; set; }
+		/// <summary>
+		/// Modèle de Groupe de site
+		/// </summary>
+		public LabelIdModel<string> GroupSiteId { get; set; }
+
+		/// <summary>
+		/// Adresse du site
+		/// </summary>
+		public Address Address { get; set; }
 
         /// <summary>
         /// true: Indique si il s'agit d'une adresse Google, false : adresse manuelle

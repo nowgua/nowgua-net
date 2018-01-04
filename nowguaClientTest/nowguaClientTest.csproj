@@ -84,6 +84,7 @@
     <Compile Include="NowguaClientTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchServiceTest.cs" />
+    <Compile Include="GroupSiteServiceTest.cs" />
     <Compile Include="SiteServiceTest.cs" />
     <Compile Include="UserServiceTest.cs" />
     <Compile Include="WebHookServiceTest.cs" />

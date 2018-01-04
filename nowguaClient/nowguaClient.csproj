@@ -27,10 +27,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="NEST">
       <Version>5.6.0</Version>
     </PackageReference>

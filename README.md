@@ -65,6 +65,9 @@ var createModel = new CreateSiteModel("Site de Test", "0123456789", 2);
 // Adresse du site (obligatoire)
 createModel.Address = new Address("228 Boulevard Alsace-Lorraine, Rosny-sous-Bois, France", 48.882485, 2.494292);
 
+// Groupe de site¹
+createModel.GroupSiteId = "5a4b435c20c6c622587e2ca6";
+
 // Information de reconnaissance 
 createModel.Recognition.Access = "Moyen d'accès au site";
 createModel.Recognition.ExitInformations = "Information sur les issues du site";
@@ -85,6 +88,24 @@ string siteId = await ng.Sites.Create(createModel);
 ```
 
 Consulter la liste des différents type de site, instructions et encore bien d'autres informations depuis cette url : https://nowgua-prod-api.azurewebsites.net/swagger/ui/#!/AppSettings/Api1_0AppsettingsGet
+
+***¹Récupérer les informations d'un groupe de site***
+
+2 possibilités de récupérer les informations d'un groupe de site :
+
+- Via le nom du group
+```csharp
+var groupSite = await ng.GroupsSites.GetByName("NowGua-Group-test1");
+
+Console.WriteLine($"{groupSite.Id} : {groupSite.Name}");
+```
+
+- Via l'Id du group
+```csharp
+var groupSite = await ng.GroupsSites.GetById("5a4b435c20c6c622587e2ca6");
+
+Console.WriteLine($"{groupSite.Id} : {groupSite.Name}");
+```
 
 **Récupérer les informations d'un site**
 
