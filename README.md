@@ -6,7 +6,7 @@
 
 ## Fonctionnalités
 * Gestion des sites 
-* Gestion des intervetions
+* Gestion des interventions
 * Moteur de recherche
 * Download Images/Vidéos et Rapport
 * WebHook
@@ -91,7 +91,7 @@ Consulter la liste des différents type de site, instructions et encore bien d'a
 
 ***¹Récupérer les informations d'un groupe de site***
 
-2 possibilités de récupérer les informations d'un groupe de site :
+2 possibilités pour récupérer les informations d'un groupe de site :
 
 - Via le nom du group
 ```csharp
