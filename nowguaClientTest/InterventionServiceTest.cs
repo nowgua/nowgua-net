@@ -52,7 +52,7 @@ namespace nowguaClientTest
 		public async void DownloadTest()
 		{
 			var ng = new NowguaClient(ConnectionSettings);
-			string InterventionId = "5a48a675b5dbf7157ce0cf17";
+			string InterventionId = "59fb3ea8176d501c949306a8";
 			var intervention = await ng.Interventions.DownloadReport(InterventionId);
 
 			Assert.NotNull(intervention);
