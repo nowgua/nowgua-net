@@ -59,13 +59,14 @@ namespace nowguaClientTest
             Assert.Equal(editModel.Description, team.Description);
 
             // Delete 
-            var result = await api.Post<LabelIdModel<string>, BooleanResult>($"/api/1.0/teams/delete", new LabelIdModel<string> { Id = editModel.Id });
+            await api.Delete($"/api/1.0/teams/delete/{team.Id}");
 
-            Assert.True(result.result);
             Thread.Sleep(2000);
-        }
+			team = await api.Get<TeamModel>($"/api/1.0/teams/{editModel.Id}");
+			Assert.NotNull(team);
+		}
 
-        [Fact]
+		[Fact]
         public async void DownloadTest()
         {
             var api = new ApiService(this.ConnectionSettings);
