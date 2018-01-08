@@ -24,10 +24,15 @@ namespace nowguaClient.Models.Sites
         /// </summary>
         public string Name { get; set; }
 
-        /// <summary>
-        /// Type de site
-        /// </summary>
-        public LabelModel<int> Type { get; set; }
+		/// <summary>
+		/// true: si Nowgua est le createur du site, false: si Nowgua n'est pas le createur du site
+		/// </summary>
+		public bool OwnerNowgua { get; set; }
+
+		/// <summary>
+		/// Type de site
+		/// </summary>
+		public LabelModel<int> Type { get; set; }
 
         /// <summary>
         /// Adresse du site
