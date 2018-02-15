@@ -99,6 +99,12 @@ namespace nowguaClient.Models.Sites
         /// </summary>
         public TeamACLs TeamACLs { get; set; }
 
+	/// <summary>
+        /// Moyen d'accès au site
+        /// </summary>	
+	public SiteAccessInformation AccessInformation { get; set;}
+	    
+	    
         public SiteModel()
         {
             CompanyACLs = new CompanyACLs();
