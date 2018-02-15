@@ -1,4 +1,5 @@
 ﻿using nowguaClient;
+using nowguaClient.Models;
 using nowguaClient.Models.Interventions;
 using nowguaClient.Models.Sites;
 using System.Threading;
@@ -34,6 +35,13 @@ namespace nowguaClientTest
             createModel.Contacts.Add("Albert", "SMITH", "albert.smith@gmail.com", "+33600000000", true); // reception automatique des rapports d'intervention du site
             createModel.Contacts.Add("Henry", "KESTREL", "h.kestrel@outlook.com", "+33600000000", false);
 
+            // Adresse du site (obligatoire)
+            createModel.AccessInformation = new SiteAccessInformation {
+                Code = "12345",
+                Commentaire = "New Commentaire Test ! ",
+                KeyRef = "referenceClef",
+            };
+
             string siteId = await ng.Sites.Create(createModel);
             Assert.NotEmpty(siteId);
 
@@ -43,6 +51,10 @@ namespace nowguaClientTest
             Assert.Equal(createModel.Name, site.Name);
             Assert.Equal(createModel.TransmitterNumber, site.TransmitterNumber);
             Assert.Equal(createModel.Address.Text, site.Address.Text);
+            Assert.Equal(site.AccessInformation.Code, "12345");
+            Assert.Equal(site.AccessInformation.KeyRef, "referenceClef");
+            Assert.Equal(site.AccessInformation.Commentaire, "New Commentaire Test ! ");
+
 
             // Recherche d'un site via numéro télétransmeteur
             var site2 = ng.Sites.Search(site.TransmitterNumber);
@@ -56,6 +68,12 @@ namespace nowguaClientTest
             editSiteModel.Name = "Nouveau Nom";
             editSiteModel.TransmitterNumber = "T0123456789";
             editSiteModel.Address = new Address("229 Boulevard Alsace-Lorraine, Rosny-sous-Bois, France", 48.882486, 2.494292);
+            editSiteModel.AccessInformation = new SiteAccessInformation
+            {
+                Code = "54321",
+                Commentaire = "Edit Commentaire Test ! ",
+                KeyRef = " Edit referenceClef",
+            };
 
             await ng.Sites.Edit(editSiteModel);
 
@@ -64,6 +82,10 @@ namespace nowguaClientTest
             Assert.Equal(editSiteModel.Name, site.Name);
             Assert.Equal(editSiteModel.TransmitterNumber, site.TransmitterNumber);
             Assert.Equal(editSiteModel.Address.Text, site.Address.Text);
+            Assert.Equal(editSiteModel.AccessInformation.Code, site.AccessInformation.Code);
+            Assert.Equal(editSiteModel.AccessInformation.KeyRef, site.AccessInformation.KeyRef);
+            Assert.Equal(editSiteModel.AccessInformation.Commentaire, site.AccessInformation.Commentaire);
+
 
             // Get des logs
             var logs = await ng.Sites.GetLogs(siteId);

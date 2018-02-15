@@ -85,6 +85,11 @@ namespace nowguaClient.Models.Sites
         /// </summary>
         public List<LabelListModel<int, object, List<string>>> Instructions { get; set; }
 
+        /// <summary>
+        /// Moyens d'accès
+        /// </summary>
+        public SiteAccessInformation AccessInformation { get; set; }
+
         public static implicit operator EditSiteModel(SiteModel Model)
         {
             EditSiteModel editModel = new EditSiteModel();
@@ -101,6 +106,7 @@ namespace nowguaClient.Models.Sites
             editModel.Notes = Model.Notes;
             editModel.Contacts = Model.Contacts;
             editModel.GroupNotify = new LabelIdModel<int> { Id = Model.GroupNotify.Id };
+            editModel.AccessInformation = new SiteAccessInformation();
 
             return editModel;
         }

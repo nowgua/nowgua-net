@@ -100,6 +100,11 @@ namespace nowguaClient.Models.Sites
         public List<EditACLModel> TeamACLs { get; set; }
 
         /// <summary>
+        /// Moyens d'accès
+        /// </summary>
+        public SiteAccessInformation AccessInformation { get; set; }
+
+        /// <summary>
         /// Création d'un site 
         /// </summary>
         /// <param name="Name">Nom du site</param>
@@ -117,6 +122,7 @@ namespace nowguaClient.Models.Sites
             this.CompanyReceiptReport = new List<string>();
             this.CompanyACLs = new List<EditACLModel>();
             this.TeamACLs = new List<EditACLModel>();
+            this.AccessInformation = new SiteAccessInformation();
 		
             this.Name = Name;
             this.TransmitterNumber = TransmitterNumber;

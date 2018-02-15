@@ -98,6 +98,11 @@ namespace nowguaClient.Models.Sites
         /// Equipes à qui l'accès du site est partagé
         /// </summary>
         public TeamACLs TeamACLs { get; set; }
+
+        /// <summary>
+        /// Moyens d'accès
+        /// </summary>
+        public SiteAccessInformation AccessInformation { get; set; }
 	    
         public SiteModel()
         {
