@@ -117,8 +117,7 @@ namespace nowguaClient.Models.Sites
             this.CompanyReceiptReport = new List<string>();
             this.CompanyACLs = new List<EditACLModel>();
             this.TeamACLs = new List<EditACLModel>();
-	    this.AccessInformation = new SiteAccessInformation();
-		    
+		
             this.Name = Name;
             this.TransmitterNumber = TransmitterNumber;
             this.GroupNotify.Id = 1;
