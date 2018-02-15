@@ -98,12 +98,6 @@ namespace nowguaClient.Models.Sites
         /// Equipes qui peuvent accéder au site
         /// </summary>
         public List<EditACLModel> TeamACLs { get; set; }
-	    
-	/// <summary>
-        /// Moyen d'accès au site (indispensable si l'intruction "Ronde intérieure" est choisie)
-        /// </summary>	
-	public SiteAccessInformation AccessInformation { get; set;}
-	    
 
         /// <summary>
         /// Création d'un site 
