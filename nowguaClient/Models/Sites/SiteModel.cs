@@ -100,7 +100,7 @@ namespace nowguaClient.Models.Sites
         public TeamACLs TeamACLs { get; set; }
 
 	/// <summary>
-        /// Moyen d'accès au site
+        /// Moyen d'accès au site (indispensable si l'intruction "Ronde intérieure" est choisie)
         /// </summary>	
 	public SiteAccessInformation AccessInformation { get; set;}
 	    
