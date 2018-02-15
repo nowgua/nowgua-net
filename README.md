@@ -73,11 +73,18 @@ createModel.Recognition.Access = "Moyen d'accès au site";
 createModel.Recognition.ExitInformations = "Information sur les issues du site";
 createModel.Notes = "Notes concernant le site";
 
-// Inscrutions d'intervention
+// Instructions d'intervention
 createModel.Instructions.Add(1, true); //L'agent doit t'il réaliser une ronde extérieure
 createModel.Instructions.Add(3, "123"); //Code secret pour s'assurer que c'est bien le client
 createModel.Instructions.Add(4, "963258"); //Code d'entrée sur le site
 // ...
+
+//Moyen d'acces (Obligatoire si l'intervention nécessite une ronde interieure)
+  createModel.AccessInformation = new SiteAccessInformation {
+  Code = "12345"; // Si un code est nécessaire pour rentrer dans le site
+  Commentaire = "New Commentaire ! ",
+   KeyRef = "referenceClef",
+   };
 
 // Ajout de contact 
 createModel.Contacts.Add("Albert", "SMITH", "albert.smith@gmail.com", "+33600000000", true); // reception automatique des rapports d'intervention du site
