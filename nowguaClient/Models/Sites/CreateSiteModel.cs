@@ -98,6 +98,12 @@ namespace nowguaClient.Models.Sites
         /// Equipes qui peuvent accéder au site
         /// </summary>
         public List<EditACLModel> TeamACLs { get; set; }
+	    
+	/// <summary>
+        /// Moyen d'accès au site (indispensable si l'intruction "Ronde intérieure" est choisie)
+        /// </summary>	
+	public SiteAccessInformation AccessInformation { get; set;}
+	    
 
         /// <summary>
         /// Création d'un site 
@@ -117,7 +123,8 @@ namespace nowguaClient.Models.Sites
             this.CompanyReceiptReport = new List<string>();
             this.CompanyACLs = new List<EditACLModel>();
             this.TeamACLs = new List<EditACLModel>();
-
+	    this.AccessInformation = new SiteAccessInformation.();
+		    
             this.Name = Name;
             this.TransmitterNumber = TransmitterNumber;
             this.GroupNotify.Id = 1;
