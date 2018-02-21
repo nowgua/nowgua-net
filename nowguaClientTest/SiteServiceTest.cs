@@ -2,6 +2,7 @@
 using nowguaClient.Models;
 using nowguaClient.Models.Interventions;
 using nowguaClient.Models.Sites;
+using System.Collections.Generic;
 using System.Threading;
 using Xunit;
 
@@ -40,6 +41,8 @@ namespace nowguaClientTest
                 Code = "12345",
                 Commentaire = "New Commentaire Test ! ",
                 KeyRef = "referenceClef",
+                LocationType = new LabelModel<int>() { Id = 2, Label = "test" },
+                Type = new List<LabelModel<int>>(){ new LabelModel<int>() { Id = 0, Label = "Badge" }, new LabelModel<int>() { Id = 1, Label = "Code" } } 
             };
 
             string siteId = await ng.Sites.Create(createModel);
@@ -54,6 +57,9 @@ namespace nowguaClientTest
             Assert.Equal(site.AccessInformation.Code, "12345");
             Assert.Equal(site.AccessInformation.KeyRef, "referenceClef");
             Assert.Equal(site.AccessInformation.Commentaire, "New Commentaire Test ! ");
+            Assert.Equal(site.AccessInformation.LocationType.Label, "test");
+            Assert.Equal(site.AccessInformation.Type.Count, 2);
+
 
 
             // Recherche d'un site via numéro télétransmeteur
@@ -73,6 +79,8 @@ namespace nowguaClientTest
                 Code = "54321",
                 Commentaire = "Edit Commentaire Test ! ",
                 KeyRef = " Edit referenceClef",
+                LocationType = new LabelModel<int>() { Id = 1, Label = "test" },
+                Type = new List<LabelModel<int>>() { new LabelModel<int>() { Id = 1, Label = "Code" } }
             };
 
             await ng.Sites.Edit(editSiteModel);
@@ -85,6 +93,8 @@ namespace nowguaClientTest
             Assert.Equal(editSiteModel.AccessInformation.Code, site.AccessInformation.Code);
             Assert.Equal(editSiteModel.AccessInformation.KeyRef, site.AccessInformation.KeyRef);
             Assert.Equal(editSiteModel.AccessInformation.Commentaire, site.AccessInformation.Commentaire);
+            Assert.Equal(editSiteModel.AccessInformation.LocationType.Id, 1);
+            Assert.Equal(editSiteModel.AccessInformation.Type.Count, 1);
 
 
             // Get des logs
