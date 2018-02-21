@@ -83,7 +83,10 @@ createModel.Instructions.Add(4, "963258"); //Code d'entrée sur le site
   createModel.AccessInformation = new SiteAccessInformation {
   Code = "12345"; // Si un code est nécessaire pour rentrer dans le site
   Commentaire = "New Commentaire ! ",
-   KeyRef = "referenceClef",
+  KeyRef = "referenceClef",
+  LocationType = new LabelModel<int>() { Id = 1, Label = "surSite" },
+  Type = new List<LabelModel<int>>(){ new LabelModel<int>() { Id = 0, Label = "Badge" }, new LabelModel<int>() { Id = 1, Label = "Code"}
+  	} 
    };
 
 // Ajout de contact 
