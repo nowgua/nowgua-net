@@ -297,4 +297,41 @@ public IActionResult YourActionOnController([FromBody] WebHookMessage message)
 
 ```
 
+Il est aussi possible de s'abonner à tous les évènements de changements sur mes sites
+
+```csharp
+var model = new CreateWebHookModel { Type = WebHookType.Site, URL = "https://api.monsite.com/key=d4s5qd4f8sf" };
+await ng.WebHooks.Create(model);
+
+```
+
+Ainsi dès qu'un site sera créée, modifié ou peu importe ... je recevrai un POST sur https://api.monsite.com/key=d4s5qd4f8sf avec le message concerné.
+
+Voici la liste des messages : 
+
+<table>
+<tr><th>Evènement</th><th>Nom</th><th>Model</th></tr>
+<tr><td>Création</td><td>Create</td><td>SiteModel</td></tr>
+<tr><td>Modification</td><td>Edit</td><td>SiteModel</td></tr>
+<tr><td>Suppression</td><td>delete</td><td>SiteModel</td></tr>
+</table>
+
+Tous les messages sont typés en WebHookMessage qui contient le type de webhook, la date, le nom du message et le modèle. Vous pouvez récupérer les données du modèle grâce à la fonction .Parse<TModel>()
+
+```csharp
+
+[HttpPost()]
+public IActionResult YourActionOnController([FromBody] WebHookMessage message)
+{
+    if (message.Name == "Create")
+    {
+    	// Récupération du message
+	var site = message.Parse<SiteModel>();
+    }
+
+    return Ok();
+}
+
+```
+
 
