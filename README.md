@@ -297,6 +297,7 @@ public IActionResult YourActionOnController([FromBody] WebHookMessage message)
 
 ```
 
+
 Il est aussi possible de s'abonner à tous les évènements de changements sur mes sites
 
 ```csharp
@@ -315,23 +316,5 @@ Voici la liste des messages :
 <tr><td>Modification</td><td>Edit</td><td>SiteModel</td></tr>
 <tr><td>Suppression</td><td>delete</td><td>SiteModel</td></tr>
 </table>
-
-Tous les messages sont typés en WebHookMessage qui contient le type de webhook, la date, le nom du message et le modèle. Vous pouvez récupérer les données du modèle grâce à la fonction .Parse<TModel>()
-
-```csharp
-
-[HttpPost()]
-public IActionResult YourActionOnController([FromBody] WebHookMessage message)
-{
-    if (message.Name == "Create")
-    {
-    	// Récupération du message
-	var site = message.Parse<SiteModel>();
-    }
-
-    return Ok();
-}
-
-```
 
 
