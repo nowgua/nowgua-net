@@ -11,7 +11,8 @@ namespace nowguaClient.Configurations
     {
         public string BaseUrl = "https://nowga.eu.auth0.com/oauth/token";
 
-        public string Audience { get; set; }
+		public string ClientId { get; set; }
+		public string Audience { get; set; }
         public string ClientConnexion { get; set; }
         public string ElasticConnectionString { get; set; }
         public string ElasticIndex { get; set; }
