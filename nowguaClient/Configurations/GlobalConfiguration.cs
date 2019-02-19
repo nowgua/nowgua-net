@@ -9,7 +9,7 @@ namespace nowguaClient.Configurations
     /// </summary>
     public class GlobalConfiguration
     {
-        public string BaseUrl = "https://nowga.eu.auth0.com/oauth/token";
+        public string BaseUrlAuth0 = "https://nowga.eu.auth0.com/oauth/token";
 
 		public string ClientId { get; set; }
 		public string Audience { get; set; }

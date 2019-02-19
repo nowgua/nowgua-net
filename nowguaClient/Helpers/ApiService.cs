@@ -103,7 +103,7 @@ namespace nowguaClient.Helpers
             var httpClient = GetHttpClient();
             var httpContent = new StringContent(JsonConvert.SerializeObject(Model), Encoding.UTF8, "application/json");
 
-            return httpClient.PutAsync(APIOperation, httpContent)
+			return httpClient.PutAsync(APIOperation, httpContent)
                                 .ContinueWith(r => new APIResponse(r.Result));
         }
 
@@ -117,7 +117,7 @@ namespace nowguaClient.Helpers
             var httpClient = GetHttpClient();
             var httpContent = new StringContent("", Encoding.UTF8, "application/json");
 
-            return httpClient.PutAsync(APIOperation, httpContent)
+			return httpClient.PutAsync(APIOperation, httpContent)
                                 .ContinueWith(r => new APIResponse(r.Result));
         }
 
@@ -246,7 +246,7 @@ namespace nowguaClient.Helpers
         public AuthToken GenerateJwtToken()
         {
             var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(this.GlobalConfiguration.BaseUrl);
+            httpClient.BaseAddress = new Uri(this.GlobalConfiguration.BaseUrlAuth0);
 
             var httpContent = new StringContent(JsonConvert.SerializeObject(
                                                     new AuthModel(this.ConnectionSettings.ClientId
