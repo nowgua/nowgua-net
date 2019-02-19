@@ -12,9 +12,11 @@ namespace nowguaClient.Services
     public interface IInterventionService : IBaseService
     {
         Task<string> Create(CreateInterventionModel createInterventionModel);
-        Task Cancel(string Id, CancelInterventionModel cancelInterventionModel);
+		Task<BooleanResult> AddMemoCogi(string Id, InterventionCommentCreateModel CreateMemoModel);
+		Task<BooleanResult> Cancel(string Id, CancelInterventionModel cancelInterventionModel);
         Task<InterventionModel> Get(string Id);
-        Task<ReportModel> GetReport(string Id);
+		Task<List<InterventionCommentModel>> ListMemoCogi(string Id);
+		Task<ReportModel> GetReport(string Id);
         Task<List<InterventionLogModel>> GetLogs(string Id);
         Task<List<InterventionModel>> Search(Func<SearchDescriptor<InterventionModel>, ISearchRequest> selector);
 		Task<byte[]> DownloadReport(string Id);
@@ -41,15 +43,26 @@ namespace nowguaClient.Services
             return _apiService.Post<CreateInterventionModel, LabelIdModel<string>>($"{BaseRoot}", createInterventionModel).ContinueWith(r => r.Result.Id);
         }
 
-        /// <summary>
-        /// Annulation de l'intervention
-        /// </summary>
-        /// <param name="Id">Identifiant de l'intervention à annuler</param>
-        /// <param name="cancelInterventionModel">Modèle du cancel</param>
-        /// <returns></returns>
-        public Task Cancel(string Id, CancelInterventionModel cancelInterventionModel)
+		/// <summary>
+		/// Creation d'un memo COGI a la creation d'une intervention
+		/// </summary>
+		/// <param name="Id">Identifiant de l'intervention à récupérer</param>
+		/// <param name="CreateMemoModel"></param>
+		/// <returns>boolean</returns>
+		public Task<BooleanResult> AddMemoCogi(string Id, InterventionCommentCreateModel CreateMemoModel)
+		{
+			return _apiService.Post<InterventionCommentCreateModel, BooleanResult>($"{BaseRoot}/{Id}/comments", CreateMemoModel);
+		}
+
+		/// <summary>
+		/// Annulation de l'intervention
+		/// </summary>
+		/// <param name="Id">Identifiant de l'intervention à annuler</param>
+		/// <param name="cancelInterventionModel">Modèle du cancel</param>
+		/// <returns></returns>
+		public Task<BooleanResult> Cancel(string Id, CancelInterventionModel cancelInterventionModel)
         {
-            return _apiService.Put<CancelInterventionModel>($"{BaseRoot}/{Id}/cancel", cancelInterventionModel);
+            return _apiService.Put<BooleanResult>($"{BaseRoot}/{Id}/cancel", cancelInterventionModel);
         }
 
         /// <summary>
@@ -62,12 +75,22 @@ namespace nowguaClient.Services
             return _apiService.Get<InterventionModel>($"{BaseRoot}/{Id}");
         }
 
-        /// <summary>
-        /// Récupération des informations du rapport d'une intervention
-        /// </summary>
-        /// <param name="Id">Identifiant de l'intervention à récupérer</param>
-        /// <returns>ReportModel</returns>
-        public Task<ReportModel> GetReport(string Id)
+		/// <summary>
+		/// Récupération des MemosCogi d'une intervention
+		/// </summary>
+		/// <param name="Id">Identifiant de l'intervention à récupérer</param>
+		/// <returns>List<InterventionCommentModel></returns>
+		public Task<List<InterventionCommentModel>> ListMemoCogi(string Id)
+		{
+			return _apiService.Get<List<InterventionCommentModel>>($"{BaseRoot}/{Id}/comments");
+		}
+
+		/// <summary>
+		/// Récupération des informations du rapport d'une intervention
+		/// </summary>
+		/// <param name="Id">Identifiant de l'intervention à récupérer</param>
+		/// <returns>ReportModel</returns>
+		public Task<ReportModel> GetReport(string Id)
         {
             return _apiService.Get<ReportModel>($"{BaseRoot}/{Id}/report");
         }

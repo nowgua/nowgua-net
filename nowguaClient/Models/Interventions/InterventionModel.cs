@@ -149,4 +149,17 @@ namespace nowguaClient.Models.Interventions
 
         }
     }
+
+	public enum InterventionStatus
+	{
+		InterventionCreated = 0,
+		WaitingForSecurityAgent = 1,
+		AssignToSecurityAgent = 2,
+		SecurityAgentOnTheWay = 3,
+		InterventionInProgress = 4,
+		EndOfIntervention = 5,
+		InterventionToValidate = 6,
+		InterventionClosed = 7,
+		InterventionCanceled = 8,
+	}
 }
