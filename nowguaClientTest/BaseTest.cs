@@ -20,9 +20,9 @@ namespace nowguaClientTest
             this.rd = new Random();
 
             this.ConnectionSettings = new NowguaConnectionSettings("https://nowgua-preprod-api.azurewebsites.net"
-                                                                    , "fsxCvlvhP2GkC82ihU3iJ0HljNpICAtn"
-                                                                    , "w-eyX4Fn0FxObG4TXDRzq8P9UV9OeVGq02bgSvq7uOrLxVYwbKIfPXQPwaWSRktM"
-                                                                    );
+                                                                    , "n9INOzup9V2Dz6NFGdrqv7wICJ7qBFlr"
+																	, "NeD2D8hDpgCcd74chwVTeVP7w29wVtONcoCBy_a8dckkQATN2RH8q8QoVCpPtN0T"
+																	);
 
             this.ApiService = new ApiService(this.ConnectionSettings);
             this.SearchService = new SearchService(this.ApiService);
