@@ -43,23 +43,29 @@ namespace nowguaClient.Models.Sites
         /// </summary>
         public List<string> OptionValues { get; set; }
 
-        public InstructionModel(InstructionCategoryEnum Category
-                                , int Id, string Label, InstructionTypeEnum Type, string Description, object Value, List<string> OptionValues)
-        {
-            this.Id = Id;
-            this.Label = Label;
-            this.Value = Value;
-            this.Type = Type.ToString();
-            this.Category = Category.ToString();
-            this.Description = Description;
-            this.OptionValues = OptionValues;
-        }
+		public bool Required { get; set; }
 
-        public InstructionModel()
-        {
+		public string RequiredValue { get; set; }
 
-        }
-    }
+		public InstructionModel(InstructionCategoryEnum Category
+								, int Id, string Label, InstructionTypeEnum Type, string Description, object Value, List<string> OptionValues, bool Required, string RequiredValue)
+		{
+			this.Id = Id;
+			this.Label = Label;
+			this.Value = Value;
+			this.Type = Type.ToString();
+			this.Category = Category.ToString();
+			this.Description = Description;
+			this.OptionValues = OptionValues;
+			this.Required = Required;
+			this.RequiredValue = RequiredValue;
+		}
+
+		public InstructionModel()
+		{
+
+		}
+	}
 
     /// <summary>
     /// Type d'instruction
