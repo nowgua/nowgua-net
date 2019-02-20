@@ -62,7 +62,7 @@ namespace nowguaClient.Services
 		/// <returns></returns>
 		public Task<BooleanResult> Cancel(string Id, CancelInterventionModel cancelInterventionModel)
         {
-            return _apiService.Put<BooleanResult>($"{BaseRoot}/{Id}/cancel", cancelInterventionModel);
+            return _apiService.Put<CancelInterventionModel, BooleanResult>($"{BaseRoot}/{Id}/cancel", cancelInterventionModel);
         }
 
         /// <summary>

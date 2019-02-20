@@ -48,7 +48,7 @@ namespace nowguaClientTest
 
             // Edit
             var editModel = new EditTeamModel { Id = team.Id, Name = "Test 2 ", Description = "Description 2..." };
-            await api.Put<EditTeamModel>("/api/1.0/teams", editModel);
+            await api.Put<EditTeamModel, LabelIdModel<string>>("/api/1.0/teams", editModel);
 
             // Read
             team = await api.Get<TeamModel>($"/api/1.0/teams/{editModel.Id}");

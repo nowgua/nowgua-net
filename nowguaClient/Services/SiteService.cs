@@ -11,7 +11,7 @@ namespace nowguaClient.Services
     public interface ISiteService : IBaseService
     {
         Task<string> Create(CreateSiteModel createSiteModel);
-        Task Edit(EditSiteModel editSiteModel);
+        Task<string> Edit(EditSiteModel editSiteModel);
         Task Share(EditSiteACLsModel editSiteACLsModel);
         Task Delete(string Id);
         Task<SiteModel> Get(string Id);
@@ -56,9 +56,9 @@ namespace nowguaClient.Services
         /// </summary>
         /// <param name="editSiteModel">Modèle d'édition du site</param>
         /// <returns></returns>
-        public Task Edit(EditSiteModel editSiteModel)
+        public Task<string> Edit(EditSiteModel editSiteModel)
         {
-            return _apiService.Put<EditSiteModel>($"{BaseRoot}", editSiteModel);
+            return _apiService.Put<EditSiteModel, LabelIdModel<string>>($"{BaseRoot}", editSiteModel).ContinueWith(r => r.Result.Id);
         }
 
         /// <summary>
