@@ -32,7 +32,12 @@ namespace nowguaClient.Models.Sites
 		/// <summary>
 		/// Modèle de Groupe de site
 		/// </summary>
-		public LabelIdModel<string> GroupSiteId { get; set; }
+		public List<LabelIdModel<string>> GroupSiteIds { get; set; }
+
+		/// <summary>
+		/// true: si Nowgua est le createur du site, false: si Nowgua n'est pas le createur du site
+		/// </summary>
+		public bool OwnerNowgua { get; set; }
 
 		/// <summary>
 		/// Adresse du site
@@ -69,10 +74,15 @@ namespace nowguaClient.Models.Sites
         /// </summary>
         public string Notes { get; set; }
 
-        /// <summary>
-        /// Liste des contacts
-        /// </summary>
-        public Contacts Contacts { get; set; }
+		/// <summary>
+		/// Reference client
+		/// </summary>
+		public string RefClient { get; set; }
+
+		/// <summary>
+		/// Liste des contacts
+		/// </summary>
+		public Contacts Contacts { get; set; }
 
         /// <summary>
         /// Type de notification 
@@ -104,13 +114,23 @@ namespace nowguaClient.Models.Sites
         /// </summary>
         public SiteAccessInformation AccessInformation { get; set; }
 
-        /// <summary>
-        /// Création d'un site 
-        /// </summary>
-        /// <param name="Name">Nom du site</param>
-        /// <param name="TransmitterNumber">Numéro télé-transmeteur</param>
-        /// <param name="Type">Identifiant correspondant au type de site. consulter https://nowgua-prod-api.azurewebsites.net/swagger/ui/#!/AppSettings/Api1_0AppsettingsGet pour plus d'information</param>
-        public CreateSiteModel(string Name, string TransmitterNumber, int Type)
+		/// <summary>
+		/// Detection du perimetre
+		/// </summary>
+		public LabelIdModel<int> DetectionPerimeter { get; set; }
+
+		/// <summary>
+		/// Detection du perimetre
+		/// </summary>
+		public List<CreateSiteAccessInfoModel> SiteAccessInfo { get; set; }
+
+		/// <summary>
+		/// Création d'un site 
+		/// </summary>
+		/// <param name="Name">Nom du site</param>
+		/// <param name="TransmitterNumber">Numéro télé-transmeteur</param>
+		/// <param name="Type">Identifiant correspondant au type de site. consulter https://nowgua-prod-api.azurewebsites.net/swagger/ui/#!/AppSettings/Api1_0AppsettingsGet pour plus d'information</param>
+		public CreateSiteModel(string Name, string TransmitterNumber, int Type)
         {
             this.Type = new LabelIdModel<int>();
             this.ReportModel = new LabelIdModel<string>();
@@ -123,8 +143,11 @@ namespace nowguaClient.Models.Sites
             this.CompanyACLs = new List<EditACLModel>();
             this.TeamACLs = new List<EditACLModel>();
             this.AccessInformation = new SiteAccessInformation();
-		
-            this.Name = Name;
+			this.GroupSiteIds = new List<LabelIdModel<string>>();
+			this.DetectionPerimeter = new LabelIdModel<int> { Id = 0 };
+
+
+			this.Name = Name;
             this.TransmitterNumber = TransmitterNumber;
             this.GroupNotify.Id = 1;
             this.AccountBilling.SiteBA = false;
@@ -168,4 +191,24 @@ namespace nowguaClient.Models.Sites
             this.Add(new Contact { FirstName = FirstName, LastName = LastName, Email = Email, Phone = Phone, RapportMail = RapportMail });
         }
     }
+
+	/// <summary>
+	/// Modèle de creation de siteAccessInfo
+	/// </summary>
+	public class CreateSiteAccessInfoModel
+	{
+		public string SiteId { get; set; }
+
+		public string PocketNumber { get; set; }
+		public LabelModel<int> Type { get; set; }
+		public string Brand { get; set; }
+		public string Reference { get; set; }
+		public string PlumbNumber { get; set; }
+		public string Observations { get; set; }
+		public string Active { get; set; }
+
+		public List<string> PicturesAcces { get; set; }
+		public List<string> PicturesPlaces { get; set; }
+
+	}
 }

@@ -13,8 +13,8 @@ namespace nowguaClientTest
         {
             var ng = new NowguaClient(ConnectionSettings);
 
-			string groupName = "NowGua-Group-test1";
-			string groupId = "5a4b435c20c6c622587e2ca6";
+			string groupName = "NowGua-test";
+			string groupId = "5c2e04f1caaad304087ccaca";
 
 			// Récupération des informations du groupe de site via le Nom
 			var group = await ng.GroupsSites.GetByName(groupName);

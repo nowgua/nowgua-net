@@ -12,5 +12,12 @@ namespace nowguaClient.Models
     {
         public T Id { get; set; }
         public string Label { get; set; }
-    }
+
+		public LabelModel(T Id, string Label)
+		{
+			this.Id = Id;
+			this.Label = Label;
+		}
+
+	}
 }

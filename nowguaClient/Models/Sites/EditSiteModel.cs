@@ -35,10 +35,20 @@ namespace nowguaClient.Models.Sites
         /// </summary>
         public LabelIdModel<string> ReportModel { get; set; }
 
-        /// <summary>
-        /// Adresse 
-        /// </summary>
-        public Address Address { get; set; }
+		/// <summary>
+		/// Ancien Modèle de Groupe de site
+		/// </summary>
+		public List<LabelIdModel<string>> OldGroupSiteIds { get; set; }
+
+		/// <summary>
+		/// Modèle de Groupe de site
+		/// </summary>
+		public List<LabelIdModel<string>> GroupSiteIds { get; set; }
+
+		/// <summary>
+		/// Adresse 
+		/// </summary>
+		public Address Address { get; set; }
 
         /// <summary>
         /// true: Indique si il s'agit d'une adresse Google, false : adresse manuelle
@@ -70,10 +80,15 @@ namespace nowguaClient.Models.Sites
         /// </summary>
         public string Notes { get; set; }
 
-        /// <summary>
-        /// Liste des contacts
-        /// </summary>
-        public List<Contact> Contacts { get; set; }
+		/// <summary>
+		/// Reference client
+		/// </summary>
+		public string RefClient { get; set; }
+
+		/// <summary>
+		/// Liste des contacts
+		/// </summary>
+		public List<Contact> Contacts { get; set; }
 
         /// <summary>
         /// Type de notification 
@@ -83,14 +98,24 @@ namespace nowguaClient.Models.Sites
         /// <summary>
         /// Liste des instructions
         /// </summary>
-        public List<LabelListModel<int, object, List<string>>> Instructions { get; set; }
+        public CreateInstructionModel Instructions { get; set; }
 
         /// <summary>
         /// Moyens d'accès
         /// </summary>
         public SiteAccessInformation AccessInformation { get; set; }
 
-        public static implicit operator EditSiteModel(SiteModel Model)
+		/// <summary>
+		/// Detection du perimetre
+		/// </summary>
+		public DetectionPerimeterType DetectionPerimeter { get; set; }
+
+		/// <summary>
+		/// Detection du perimetre
+		/// </summary>
+		public bool Incomplete { get; set; }
+
+		public static implicit operator EditSiteModel(SiteModel Model)
         {
             EditSiteModel editModel = new EditSiteModel();
             editModel.Name = Model.Name;
@@ -107,6 +132,8 @@ namespace nowguaClient.Models.Sites
             editModel.Contacts = Model.Contacts;
             editModel.GroupNotify = new LabelIdModel<int> { Id = Model.GroupNotify.Id };
             editModel.AccessInformation = new SiteAccessInformation();
+			editModel.DetectionPerimeter = Model.DetectionPerimeter;
+
 
             return editModel;
         }

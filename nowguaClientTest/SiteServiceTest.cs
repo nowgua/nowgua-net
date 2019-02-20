@@ -28,12 +28,10 @@ namespace nowguaClientTest
             
             // Inscrutions d'intervention
             createModel.Instructions.Add(1, true); //L'agent doit t'il réaliser une ronde extérieure
-            createModel.Instructions.Add(3, "123"); //Code secret pour s'assurer que c'est bien le client
-            createModel.Instructions.Add(4, "963258"); //Code d'entrée sur le site
-            // ...
+			// ...
 
-            // Ajout de contact 
-            createModel.Contacts.Add("Albert", "SMITH", "albert.smith@gmail.com", "+33600000000", true); // reception automatique des rapports d'intervention du site
+			// Ajout de contact 
+			createModel.Contacts.Add("Albert", "SMITH", "albert.smith@gmail.com", "+33600000000", true); // reception automatique des rapports d'intervention du site
             createModel.Contacts.Add("Henry", "KESTREL", "h.kestrel@outlook.com", "+33600000000", false);
 
             // Adresse du site (obligatoire)
@@ -41,8 +39,8 @@ namespace nowguaClientTest
                 Code = "12345",
                 Commentaire = "New Commentaire Test ! ",
                 KeyRef = "referenceClef",
-                LocationType = new LabelModel<int>() { Id = 2, Label = "test" },
-                Type = new List<LabelModel<int>>(){ new LabelModel<int>() { Id = 0, Label = "Badge" }, new LabelModel<int>() { Id = 1, Label = "Code" } } 
+                LocationType = new LabelModel<int>(1, "embarque"),
+                Type = new List<LabelModel<int>>(){ new LabelModel<int>(1, "Badge"), new LabelModel<int>(0, "Code") } 
             };
 
             string siteId = await ng.Sites.Create(createModel);
@@ -57,17 +55,17 @@ namespace nowguaClientTest
             Assert.Equal(site.AccessInformation.Code, "12345");
             Assert.Equal(site.AccessInformation.KeyRef, "referenceClef");
             Assert.Equal(site.AccessInformation.Commentaire, "New Commentaire Test ! ");
-            Assert.Equal(site.AccessInformation.LocationType.Label, "test");
+            Assert.Equal(site.AccessInformation.LocationType.Label, "embarque");
             Assert.Equal(site.AccessInformation.Type.Count, 2);
 
 
 
             // Recherche d'un site via numéro télétransmeteur
-            var site2 = ng.Sites.Search(site.TransmitterNumber);
-            Assert.NotNull(site);
-            Assert.Equal(createModel.Name, site.Name);
-            Assert.Equal(createModel.TransmitterNumber, site.TransmitterNumber);
-            Assert.Equal(createModel.Address.Text, site.Address.Text);
+            var site2 = await ng.Sites.Search(site.TransmitterNumber);
+            Assert.NotNull(site2);
+            Assert.Equal(createModel.Name, site2.Name);
+            Assert.Equal(createModel.TransmitterNumber, site2.TransmitterNumber);
+            Assert.Equal(createModel.Address.Text, site2.Address.Text);
 
             // Modification du site 
             EditSiteModel editSiteModel = await ng.Sites.Get(siteId);
@@ -79,8 +77,8 @@ namespace nowguaClientTest
                 Code = "54321",
                 Commentaire = "Edit Commentaire Test ! ",
                 KeyRef = " Edit referenceClef",
-                LocationType = new LabelModel<int>() { Id = 1, Label = "test" },
-                Type = new List<LabelModel<int>>() { new LabelModel<int>() { Id = 1, Label = "Code" } }
+                LocationType = new LabelModel<int>(1, "embarque"),
+                Type = new List<LabelModel<int>>() { new LabelModel<int>(0, "Code") }
             };
 
             await ng.Sites.Edit(editSiteModel);
@@ -106,10 +104,11 @@ namespace nowguaClientTest
             await ng.Sites.Delete(siteId);
 
             Thread.Sleep(3000);
-            var sites = await ng.Sites.Search(s => s.Type(ng.Sites.SearchTypeName).Query(q => q.MatchAll()).Take(1000));
+            var sites = await ng.Sites.Search(s => s.Type(ng.Sites.SearchTypeName).Query(q => q.Bool(b=> b.Must(m=>m.Term("deleted", false)))).Take(1000));
             Assert.NotNull(sites);
             Assert.NotEmpty(sites);
             Assert.False(sites.Exists(s => s.Id == siteId));
         }
-    }
+	}
 }
+

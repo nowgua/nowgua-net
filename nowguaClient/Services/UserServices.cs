@@ -14,12 +14,13 @@ namespace nowguaClient.Services
     public interface IUserService : IBaseService
     {
         Task<UserModel> Get(string Id);
-    }
+		Task<UserMeModel> GetCurrentUser();
+	}
 
     /// <summary>
     /// Gestion des utilisateurs
     /// </summary>
-    public class UserService : BaseService<SiteModel>, IUserService
+    public class UserService : BaseService<UserModel>, IUserService
     {
         public UserService(IApiService ApiService, ISearchService SearchService) 
             : base(ApiService, SearchService, "/api/1.0/users")
@@ -41,9 +42,10 @@ namespace nowguaClient.Services
         /// Récupération de l'utilisateur connecté
         /// </summary>
         /// <returns>UserMeModel</returns>
-        public Task<UserMeModel> Get()
+        public Task<UserMeModel> GetCurrentUser()
         {
             return _apiService.Get<UserMeModel>($"{BaseRoot}/me");
         }
-    }
+
+	}
 }

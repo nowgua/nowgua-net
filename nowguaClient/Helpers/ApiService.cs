@@ -19,7 +19,7 @@ namespace nowguaClient.Helpers
         Task<TResult> Get<TResult>(string APIOperation);
         Task<TResult> Post<TModel, TResult>(string APIOperation, TModel Model);
         Task Put(string APIOperation);
-        Task Put<TModel>(string APIOperation, TModel Model);
+        Task<TResult> Put<TModel, TResult>(string APIOperation, TModel Model);
         Task Delete(string APIOperation);
         Task Delete<TModel>(string APIOperation, TModel Model);
         Task<byte[]> Download(string APIOperation);
@@ -98,13 +98,13 @@ namespace nowguaClient.Helpers
         /// <param name="APIOperation">URL de l'API</param>
         /// <param name="Model">Modèle à envoyer</param>
         /// <returns></returns>
-        public Task Put<TModel>(string APIOperation, TModel Model)
+        public Task<TResult> Put<TModel, TResult>(string APIOperation, TModel Model)
         {
             var httpClient = GetHttpClient();
             var httpContent = new StringContent(JsonConvert.SerializeObject(Model), Encoding.UTF8, "application/json");
 
-            return httpClient.PutAsync(APIOperation, httpContent)
-                                .ContinueWith(r => new APIResponse(r.Result));
+			return httpClient.PutAsync(APIOperation, httpContent)
+                                .ContinueWith(r => APIResponse<TResult>.Parse(r.Result));
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace nowguaClient.Helpers
             var httpClient = GetHttpClient();
             var httpContent = new StringContent("", Encoding.UTF8, "application/json");
 
-            return httpClient.PutAsync(APIOperation, httpContent)
+			return httpClient.PutAsync(APIOperation, httpContent)
                                 .ContinueWith(r => new APIResponse(r.Result));
         }
 
@@ -246,7 +246,7 @@ namespace nowguaClient.Helpers
         public AuthToken GenerateJwtToken()
         {
             var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(this.GlobalConfiguration.BaseUrl);
+            httpClient.BaseAddress = new Uri(this.GlobalConfiguration.BaseUrlAuth0);
 
             var httpContent = new StringContent(JsonConvert.SerializeObject(
                                                     new AuthModel(this.ConnectionSettings.ClientId

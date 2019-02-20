@@ -34,10 +34,20 @@ namespace nowguaClient.Models.Sites
 		/// </summary>
 		public LabelModel<int> Type { get; set; }
 
-        /// <summary>
-        /// Adresse du site
-        /// </summary>
-        public AddressModel Address { get; set; }
+		/// <summary>
+		/// Modèle de Groupe de site
+		/// </summary>
+		public List<GroupSiteModel> GroupSiteIds { get; set; }
+
+		/// <summary>
+		/// Id du modèle de rapport
+		/// </summary>
+		public NameModel<string> ReportModel { get; set; }
+
+		/// <summary>
+		/// Adresse du site
+		/// </summary>
+		public AddressModel Address { get; set; }
 
         /// <summary>
         /// true: Indique si il s'agit d'une adresse Google, false : adresse manuelle
@@ -69,10 +79,15 @@ namespace nowguaClient.Models.Sites
         /// </summary>
         public string Notes { get; set; }
 
-        /// <summary>
-        /// Liste des contacts du site
-        /// </summary>
-        public List<Contact> Contacts { get; set; }
+		/// <summary>
+		/// Reference client
+		/// </summary>
+		public string RefClient { get; set; }
+
+		/// <summary>
+		/// Liste des contacts du site
+		/// </summary>
+		public List<Contact> Contacts { get; set; }
 
         /// <summary>
         /// Type de notification du site
@@ -103,8 +118,25 @@ namespace nowguaClient.Models.Sites
         /// Moyens d'accès
         /// </summary>
         public SiteAccessInformation AccessInformation { get; set; }
-	    
-        public SiteModel()
+
+		/// <summary>
+		/// Detection du perimetre
+		/// </summary>
+		public DetectionPerimeterType DetectionPerimeter { get; set; }
+
+		public bool Incomplete { get; set; }
+
+		/// <summary>
+		/// Indicateur de suppression
+		/// </summary>
+		public bool Deleted { get; set; }
+
+		/// <summary>
+		/// Date de suppression
+		/// </summary>
+		public long DeletedDate { get; set; }
+
+		public SiteModel()
         {
             CompanyACLs = new CompanyACLs();
             TeamACLs = new TeamACLs();

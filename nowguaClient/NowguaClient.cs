@@ -20,6 +20,7 @@ namespace nowguaClient
     public class NowguaClient : INowguaClient
     {
         private IApiService _apiService { get; }
+
         private ISearchService _searchService { get; }
 
         /// <summary>

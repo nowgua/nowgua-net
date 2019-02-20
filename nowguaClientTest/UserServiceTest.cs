@@ -14,7 +14,7 @@ namespace nowguaClientTest
         public async void GetCurrentTest()
         {
             var userService = new UserService(ApiService, SearchService);
-            var currentUser = await userService.Get();
+            var currentUser = await userService.GetCurrentUser();
 
             Assert.NotNull(currentUser);
             Assert.NotEmpty(currentUser.Id);
@@ -24,8 +24,7 @@ namespace nowguaClientTest
         public async void GetTest()
         {
             var userService = new UserService(ApiService, SearchService);
-            var currentUser = await userService.Get();
-            var user = await userService.Get(currentUser.Id);
+            var user = await userService.Get("5c6bba950038a80a605433bb");
 
             Assert.NotNull(user);
             Assert.NotEmpty(user.Id);

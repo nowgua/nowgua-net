@@ -18,14 +18,20 @@ namespace nowguaClientTest
             var ng = new NowguaClient(ConnectionSettings);
 
             // Récupération du site
-            string TransmetterNumber = "3241";
+            string TransmetterNumber = "myt3";
             var site = await ng.Sites.Search(TransmetterNumber);
 
             // Création de l'intervention
-            var interventionModel = new CreateInterventionModel(site.Id, 1, DateTime.Now, "Attention présence sur le site. Merci de contacter Mr Andre une fois arrivé sur place ...");
+            var interventionModel = new CreateInterventionModel(site.Id, 1, DateTime.Now, "Attention présence sur le site. Merci de contacter Mr Andre une fois arrivé sur place ...", "MemoCPGI");
             var interventionId = await ng.Interventions.Create(interventionModel);
 
-            Assert.NotEmpty(interventionId);
+			if (interventionModel.MemoCogi != "")
+			{
+				var AddMemoCogi = await ng.Interventions.AddMemoCogi(interventionId, new InterventionCommentCreateModel { Message = interventionModel.MemoCogi });
+				Assert.True(AddMemoCogi.result);
+			}
+
+			Assert.NotEmpty(interventionId);
 
             // Récupération de toutes les informations d'une intervention
             var intervention = await ng.Interventions.Get(interventionId);
@@ -33,10 +39,11 @@ namespace nowguaClientTest
             Assert.Equal(site.Id, intervention.Site.Id);
             Assert.Equal(interventionModel.Commentaire, intervention.Commentaire);
             Assert.Equal(interventionModel.AlarmType.Id, intervention.AlarmType.Id);
+			Assert.Equal(intervention.Status.Id, (int)InterventionStatus.WaitingForSecurityAgent);
 
-            // Recherche d'intervention
 
-            var interventions = await ng.Interventions.Search(i => i.Type(ng.Interventions.SearchTypeName)
+			// Recherche d'intervention
+			var interventions = await ng.Interventions.Search(i => i.Type(ng.Interventions.SearchTypeName)
                                                                             .Query(q => q
                                                                                 .Term(t => t.Site.TransmitterNumber, TransmetterNumber)
                                                                                 && q.Term(t => t.AlarmType.Id, 1)
@@ -45,8 +52,9 @@ namespace nowguaClientTest
             Assert.NotEmpty(interventions);
             Assert.True(interventions.Exists(i => i.Id == interventionId));
 
-
-        }
+			var cancel = await ng.Interventions.Cancel(interventionId, new CancelInterventionModel { CancellationReason = "testdepuis lib" });
+			Assert.True(cancel.result);
+		}
 
 		[Fact]
 		public async void DownloadTest()
@@ -63,7 +71,7 @@ namespace nowguaClientTest
 		public async void GetReportTest()
 		{
 			var ng = new NowguaClient(ConnectionSettings);
-			string InterventionId = "5a48a675b5dbf7157ce0cf17";
+			string InterventionId = "5c474ddbaea3ff1728c0f0c5";
 			var intervention = await ng.Interventions.Get(InterventionId);
 			var interventionReport = await ng.Interventions.GetReport(InterventionId);
 
