@@ -19,7 +19,7 @@ namespace nowguaClientTest
         {
             this.rd = new Random();
 
-            this.ConnectionSettings = new NowguaConnectionSettings("https://nowgua-preprod-api.azurewebsites.net"
+            this.ConnectionSettings = new NowguaConnectionSettings("https://nowgua-preprod-api-staging.azurewebsites.net"
                                                                     , "n9INOzup9V2Dz6NFGdrqv7wICJ7qBFlr"
 																	, "NeD2D8hDpgCcd74chwVTeVP7w29wVtONcoCBy_a8dckkQATN2RH8q8QoVCpPtN0T"
 																	);
