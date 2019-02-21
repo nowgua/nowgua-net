@@ -36,9 +36,9 @@ ou recherchez simplement `nowgua-net` dans le gestionnaire de package Nuget.
 Vous devez disposer d'un ClientId et ClientSecret pour vous connecter à l'API 
 
 ```csharp
-var settings = new NowguaConnectionSettings("https://nowgua-prod-api.azurewebsites.net",
-                                            "CLIENT-ID",
-                                            "CLIENT-SECRET");
+var settings = new NowguaConnectionSettings("$PROD-SERVER",
+                                            "$CLIENT-ID",
+                                            "$CLIENT-SECRET");
 var ng = new NowguaClient(settings);
 ```
 
