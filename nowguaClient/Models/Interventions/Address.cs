@@ -7,7 +7,8 @@ namespace nowguaClient.Models.Interventions
     public class Address
     {
         public string Text { get; set; }
-        public double Latitude { get; set; }
+		public string ExternalTextValue { get; set; }
+		public double Latitude { get; set; }
         public double Longitude { get; set; }
 
         public bool AddressType { get; set; }
@@ -21,8 +22,9 @@ namespace nowguaClient.Models.Interventions
         /// <param name="Text">Adresse au format texte</param>
         /// <param name="Latitude">Coordonnée de Latitude de l'adresse</param>
         /// <param name="Longitude">Coordonnée de Longitude de l'adresse</param>
-        public Address(string Text, double Latitude, double Longitude)
+        public Address(string Text, string ExternalTextValue, double Latitude, double Longitude)
         {
+			this.ExternalTextValue = ExternalTextValue;
             this.Text = Text;
             this.Latitude = Latitude;
             this.Longitude = Longitude;

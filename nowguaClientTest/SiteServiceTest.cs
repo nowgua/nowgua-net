@@ -19,7 +19,7 @@ namespace nowguaClientTest
             var createModel = new CreateSiteModel("Site de Test", rd.Next(1000, 10000).ToString(), 2);
 
             // Adresse du site (obligatoire)
-            createModel.Address = new Address("228 Boulevard Alsace-Lorraine, Rosny-sous-Bois, France", 48.882485, 2.494292);
+            createModel.Address = new Address("228 Boulevard Alsace-Lorraine, Rosny-sous-Bois, France", "", 48.882485, 2.494292);
 
             // Information de reconnaissance 
             createModel.Recognition.Access = "Moyen d'accès au site";
@@ -71,7 +71,7 @@ namespace nowguaClientTest
             EditSiteModel editSiteModel = await ng.Sites.Get(siteId);
             editSiteModel.Name = "Nouveau Nom";
             editSiteModel.TransmitterNumber = "T0123456789";
-            editSiteModel.Address = new Address("229 Boulevard Alsace-Lorraine, Rosny-sous-Bois, France", 48.882486, 2.494292);
+            editSiteModel.Address = new Address("229 Boulevard Alsace-Lorraine, Rosny-sous-Bois, France", "", 48.882486, 2.494292);
             editSiteModel.AccessInformation = new SiteAccessInformation
             {
                 Code = "54321",

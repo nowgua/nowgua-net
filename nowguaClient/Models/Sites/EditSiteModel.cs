@@ -122,7 +122,7 @@ namespace nowguaClient.Models.Sites
             editModel.TransmitterNumber = Model.TransmitterNumber;
             editModel.Id = Model.Id;
             editModel.Type = new LabelIdModel<int> { Id = Model.Type.Id };
-            editModel.Address = new Address(Model.Address.Text, Model.Address.Location.Lat, Model.Address.Location.Lon);
+            editModel.Address = new Address(Model.Address.Text, Model.Address.ExternalTextValue, Model.Address.Location.Lat, Model.Address.Location.Lon);
             editModel.AddressType = Model.AddressType;
             editModel.MaxInterventionCost = Model.MaxInterventionCost;
             editModel.MaxDelay = Model.MaxDelay;

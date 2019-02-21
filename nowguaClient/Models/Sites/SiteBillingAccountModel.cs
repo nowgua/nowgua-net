@@ -35,10 +35,15 @@ namespace nowguaClient.Models.Sites
         /// </summary>
         public string Text { get; set; }
 
-        /// <summary>
-        /// Latitude 
-        /// </summary>
-        public double Lat { get; set; }
+		/// <summary>
+		/// Adresse externe au format texte
+		/// </summary>
+		public string ExternalTextValue { get; set; }
+
+		/// <summary>
+		/// Latitude 
+		/// </summary>
+		public double Lat { get; set; }
 
         /// <summary>
         /// Longitude
