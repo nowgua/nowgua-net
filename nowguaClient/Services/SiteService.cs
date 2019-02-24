@@ -16,9 +16,10 @@ namespace nowguaClient.Services
         Task Delete(string Id);
         Task<SiteModel> Get(string Id);
         Task<List<SiteLogModel>> GetLogs(string Id);
-        Task<SiteModel> Search(string TransmitterNumber);
-        Task<List<SiteModel>> Search(Func<SearchDescriptor<SiteModel>, ISearchRequest> selector);
-    }
+        Task<List<SiteModel>> SearchTT(string TransmitterNumber);
+		Task<List<SiteModel>> SearchName(string Name);
+		Task<List<SiteModel>> Search(Func<SearchDescriptor<SiteModel>, ISearchRequest> selector);
+	}
 
     /// <summary>
     /// Gestion des sites 
@@ -96,24 +97,51 @@ namespace nowguaClient.Services
         /// </summary>
         /// <param name="selector">Query ElasticSearch</param>
         /// <returns>Liste des sites correspondant à la recherche</returns>
-        public Task<List<SiteModel>> Search(Func<SearchDescriptor<SiteModel>, ISearchRequest> selector)
+        public Task<List<SiteModel>> SearchTT(string TransmitterNumber)
         {
-            List<SiteModel> sites = _searchService.Search<SiteModel>(selector);
+			List<SiteModel> sites = new List<SiteModel>();
+
+			var must = new List<Func<QueryContainerDescriptor<SiteModel>, QueryContainer>>();
+
+			must.Add(m => m.Term(new Field("transmitterNumber"), TransmitterNumber));
+			must.Add(m => m.Term(t => t.Field(f => f.Deleted).Value(false)));
+
+			sites = _searchService.Search<SiteModel>(s => s.Type(SearchTypeName)
+																		.Query(q => q
+																			.Bool(b => b
+																				.Must(must)))
+																		.Size(100)
+                                                                    );
 
             return Task.FromResult(sites);
         }
 
-        public Task<SiteModel> Search(string TransmitterNumber)
-        {
-            List<SiteModel> sites = _searchService.Search<SiteModel>(u => u.Type(SearchTypeName)
-                                                                        .Query(q => q.Term(new Field("transmitterNumber"), TransmitterNumber))
-                                                                        .Size(10)
-                                                                    );
+		public Task<List<SiteModel>> SearchName(string Name)
+		{
+			List<SiteModel> sites = new List<SiteModel>();
 
-            if (sites.Count == 0)
-                return Task.FromResult<SiteModel>(null);
+			var must = new List<Func<QueryContainerDescriptor<SiteModel>, QueryContainer>>();
 
-            return Task.FromResult(sites[0]);
-        }
-    }
+			must.Add(m => m.Term(new Field("name"), Name));
+			must.Add(m => m.Term(t => t.Field(f => f.Deleted).Value(false)));
+
+			sites = _searchService.Search<SiteModel>(s => s.Type(SearchTypeName)
+																		.Query(q => q
+																			.Bool(b => b
+																				.Must(must)))
+																		.Size(100)
+																	);
+
+			return Task.FromResult(sites);
+		}
+
+		public Task<List<SiteModel>> Search(Func<SearchDescriptor<SiteModel>, ISearchRequest> selector)
+		{
+			List<SiteModel> sites = new List<SiteModel>();
+
+			sites = _searchService.Search<SiteModel>(selector);
+
+			return Task.FromResult(sites);
+		}
+	}
 }

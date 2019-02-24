@@ -19,10 +19,10 @@ namespace nowguaClientTest
 
             // Récupération du site
             string TransmetterNumber = "myt3";
-            var site = await ng.Sites.Search(TransmetterNumber);
+            var site = await ng.Sites.SearchTT(TransmetterNumber);
 
             // Création de l'intervention
-            var interventionModel = new CreateInterventionModel(site.Id, 1, DateTime.Now, "Attention présence sur le site. Merci de contacter Mr Andre une fois arrivé sur place ...", "MemoCPGI");
+            var interventionModel = new CreateInterventionModel(site[0].Id, 1, DateTime.Now, "Attention présence sur le site. Merci de contacter Mr Andre une fois arrivé sur place ...", "MemoCPGI");
             var interventionId = await ng.Interventions.Create(interventionModel);
 
 			if (interventionModel.MemoCogi != "")
@@ -36,7 +36,7 @@ namespace nowguaClientTest
             // Récupération de toutes les informations d'une intervention
             var intervention = await ng.Interventions.Get(interventionId);
             Assert.NotNull(intervention);
-            Assert.Equal(site.Id, intervention.Site.Id);
+            Assert.Equal(site[0].Id, intervention.Site.Id);
             Assert.Equal(interventionModel.Commentaire, intervention.Commentaire);
             Assert.Equal(interventionModel.AlarmType.Id, intervention.AlarmType.Id);
 			Assert.Equal(intervention.Status.Id, (int)InterventionStatus.WaitingForSecurityAgent);

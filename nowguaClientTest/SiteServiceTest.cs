@@ -61,11 +61,11 @@ namespace nowguaClientTest
 
 
             // Recherche d'un site via numéro télétransmeteur
-            var site2 = await ng.Sites.Search(site.TransmitterNumber);
+            var site2 = await ng.Sites.SearchTT(site.TransmitterNumber);
             Assert.NotNull(site2);
-            Assert.Equal(createModel.Name, site2.Name);
-            Assert.Equal(createModel.TransmitterNumber, site2.TransmitterNumber);
-            Assert.Equal(createModel.Address.Text, site2.Address.Text);
+            Assert.Equal(createModel.Name, site2[0].Name);
+            Assert.Equal(createModel.TransmitterNumber, site2[0].TransmitterNumber);
+            Assert.Equal(createModel.Address.Text, site2[0].Address.Text);
 
             // Modification du site 
             EditSiteModel editSiteModel = await ng.Sites.Get(siteId);
