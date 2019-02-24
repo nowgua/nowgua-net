@@ -30,4 +30,16 @@ namespace nowguaClient.Models.Compagnies
 
 		public long DeletedDate { get; set; }
 	}
+
+	public class CompanyPublicModel
+	{
+		public string Id { get; set; }
+		public string Name { get; set; }
+		public string Siren { get; set; }
+		public string Siret { get; set; }
+		public string Phone1 { get; set; }
+		public string Phone2 { get; set; }
+		public string Email { get; set; }
+		public string Address { get; set; }
+	}
 }

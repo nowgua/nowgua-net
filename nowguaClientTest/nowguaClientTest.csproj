@@ -79,6 +79,7 @@
     <Compile Include="APIResponseTest.cs" />
     <Compile Include="ApiServiceTest.cs" />
     <Compile Include="BaseTest.cs" />
+    <Compile Include="CompanyServiceTest.cs" />
     <Compile Include="FileServiceTest.cs" />
     <Compile Include="InterventionServiceTest.cs" />
     <Compile Include="NowguaClientTest.cs" />

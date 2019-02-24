@@ -54,6 +54,11 @@ namespace nowguaClient
 		public IGroupSiteService GroupsSites { get; internal set; }
 
 		/// <summary>
+		/// Gestion des groupes de site
+		/// </summary>
+		public ICompanyService Companies { get; internal set; }
+
+		/// <summary>
 		/// Connexion à nowgua
 		/// </summary>
 		/// <param name="ConnectionSettings">Information de connexion à l'API Nowgua</param>
@@ -68,6 +73,7 @@ namespace nowguaClient
             this.Files = new FileService(_apiService, _searchService);
             this.Users = new UserService(_apiService, _searchService);
 			this.GroupsSites = new GroupSiteService(_apiService, _searchService);
+			this.Companies = new CompanyService(_apiService, _searchService);
 		}
     }
 }
