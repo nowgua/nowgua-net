@@ -33,7 +33,10 @@ namespace nowguaClient.Models.Interventions
             this.Components = new List<AddressEntityComponent>();
         }
 
-		public Address() { }
+		public Address() {
+			this.Types = new List<string>();
+			this.Components = new List<AddressEntityComponent>();
+		}
     }
 
     public class AddressEntityComponent
