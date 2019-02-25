@@ -10,8 +10,8 @@ namespace nowguaClient.Models.Interventions
 		public string ExternalTextValue { get; set; }
 		public double Latitude { get; set; }
         public double Longitude { get; set; }
-
-        public bool AddressType { get; set; }
+		public AddressMode AddressMode { get; set; }
+		public bool AddressType { get; set; }
 
         public List<string> Types { get; set; }
         public List<AddressEntityComponent> Components { get; set; }
@@ -32,6 +32,8 @@ namespace nowguaClient.Models.Interventions
             this.Types = new List<string>();
             this.Components = new List<AddressEntityComponent>();
         }
+
+		public Address() { }
     }
 
     public class AddressEntityComponent
@@ -45,4 +47,11 @@ namespace nowguaClient.Models.Interventions
             this.Types = new List<string>();
         }
     }
+
+	public enum AddressMode
+	{
+		AutoCompletionMode = 0,
+		ManualMode = 1,
+		FreeMode = 2
+	}
 }
