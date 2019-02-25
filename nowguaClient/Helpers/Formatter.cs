@@ -8,9 +8,14 @@ using System.Threading.Tasks;
 
 namespace nowgaApi.Core.Helpers
 {
-	public class Formatter
+	public interface IFormatter
 	{
-		public static Address ConvertStringToAddress(string text)
+		Address ConvertStringToAddress(string text);
+	}
+
+	public class Formatter : IFormatter
+	{
+		public Address ConvertStringToAddress(string text)
 		{
 			Address address = new Address();
 

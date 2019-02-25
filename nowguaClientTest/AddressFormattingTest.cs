@@ -26,7 +26,8 @@ namespace nowguaClientTest
 
 		public void GetAddress(string AddressString, AddressMode AddressModeReponse)
 		{
-			Address test = Formatter.ConvertStringToAddress(AddressString);
+			var formatter = new Formatter();
+			Address test = formatter.ConvertStringToAddress(AddressString);
 
 			Assert.Equal(test.AddressMode, AddressModeReponse);
 		}
