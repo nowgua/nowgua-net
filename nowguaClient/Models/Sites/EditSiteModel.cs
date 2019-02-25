@@ -133,9 +133,15 @@ namespace nowguaClient.Models.Sites
             editModel.GroupNotify = new LabelIdModel<int> { Id = Model.GroupNotify.Id };
             editModel.AccessInformation = new SiteAccessInformation();
 			editModel.DetectionPerimeter = Model.DetectionPerimeter;
+			editModel.GroupSiteIds = new List<LabelIdModel<string>>();
+			if (Model.GroupSiteIds.Count != 0)
+				foreach (var item in Model.GroupSiteIds)
+				{
+					editModel.GroupSiteIds.Add(new LabelIdModel<string> { Id = Model.Id });
+				}
+			editModel.ReportModel = new LabelIdModel<string> { Id = Model.ReportModel.Id };
 
-
-            return editModel;
+			return editModel;
         }
     }
 }
