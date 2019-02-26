@@ -19,5 +19,14 @@ namespace nowguaClient.Models.ACLsModel
         /// Id du role 
         /// </summary>
         public int RoleId { get; set; }
-    }
+
+		public static implicit operator EditACLModel(ACLModel Model)
+		{
+			EditACLModel editAclsModel = new EditACLModel();
+			editAclsModel.Id = Model.Id;
+			editAclsModel.RoleId = Model.RoleId;
+
+			return editAclsModel;
+		}
+	}
 }
