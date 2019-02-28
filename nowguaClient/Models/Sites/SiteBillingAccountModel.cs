@@ -38,7 +38,7 @@ namespace nowguaClient.Models.Sites
 		/// <summary>
 		/// Adresse externe au format texte
 		/// </summary>
-		public string ExternalTextValue { get; set; }
+		public string ExternalText { get; set; }
 
 		/// <summary>
 		/// Latitude 
