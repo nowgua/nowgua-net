@@ -49,13 +49,15 @@ namespace nowguaClient.Helpers
 
                     this.Error.Result = JsonConvert.DeserializeObject<APIBadRequestResult>(r.Result);
                 }
-
-                if (ResponseMessage.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+				else
                 {
-                    var r = ResponseMessage.Content.ReadAsStringAsync();
-                    r.Wait();
+					if (ResponseMessage.Content != null)
+					{
+						var r = ResponseMessage.Content.ReadAsStringAsync();
+						r.Wait();
 
-                    this.Error.Message = r.Result;
+						this.Error.Message += " - " + r.Result;
+					}
                 }
             }
         }

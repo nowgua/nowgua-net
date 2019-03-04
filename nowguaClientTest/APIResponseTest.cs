@@ -72,7 +72,7 @@ namespace nowguaClientTest
             Assert.NotNull(response.Error);
             Assert.True(response.OnError);
             Assert.Equal(403, response.Error.Code);
-            Assert.Equal("Forbidden", response.Error.Message);
+            Assert.Contains("Forbidden", response.Error.Message);
         }
 
         [Fact]
@@ -84,7 +84,7 @@ namespace nowguaClientTest
             Assert.NotNull(response.Error);
             Assert.True(response.OnError);
             Assert.Equal(401, response.Error.Code);
-            Assert.Equal("Unauthorized", response.Error.Message);
+            Assert.Contains("Unauthorized", response.Error.Message);
         }
 
         [Fact]
@@ -96,7 +96,7 @@ namespace nowguaClientTest
             Assert.NotNull(response.Error);
             Assert.True(response.OnError);
             Assert.Equal(404, response.Error.Code);
-            Assert.Equal("NotFound", response.Error.Message);
+            Assert.Contains("NotFound", response.Error.Message);
         }
 
         [Fact]
@@ -109,8 +109,9 @@ namespace nowguaClientTest
             Assert.NotNull(response.Error);
             Assert.True(response.OnError);
             Assert.Equal(500, response.Error.Code);
-            Assert.Equal("Message d'erreur", response.Error.Message);
-        }
+            Assert.Contains("InternalServerError", response.Error.Message);
+			Assert.Contains("Message d'erreur", response.Error.Message);
+		}
 
         [Theory]
         [InlineData(System.Net.HttpStatusCode.InternalServerError, typeof(InternalServerException))]
