@@ -131,7 +131,6 @@ namespace nowguaClient.Models.Sites
             editModel.Notes = Model.Notes;
             editModel.Contacts = Model.Contacts;
             editModel.GroupNotify = new LabelIdModel<int> { Id = Model.GroupNotify.Id };
-            editModel.AccessInformation = new SiteAccessInformation();
 			editModel.DetectionPerimeter = Model.DetectionPerimeter;
 			editModel.GroupSiteIds = new List<LabelIdModel<string>>();
 			if (Model.GroupSiteIds.Count != 0)
