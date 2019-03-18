@@ -39,18 +39,14 @@ namespace nowguaClient.Models.Sites
         /// </summary>
         public string KeyRef { get; set; }
 
-        public SiteAccessInformation(List<LabelModel<int>> Type,string Code, AddressModel Address, string Commentaire, LabelModel<int> LocationType)
+        public SiteAccessInformation(List<LabelModel<int>> Type,string Code, AddressModel Address, string Commentaire, LabelModel<int> LocationType, string KeyRef)
         {
             this.Type = Type;
             this.Code = Code;
             this.Address = Address;
             this.Commentaire = Commentaire;
             this.LocationType = LocationType;
-        }
-
-        public SiteAccessInformation()
-        {
-
+			this.KeyRef = KeyRef;
         }
 
     }

@@ -47,10 +47,7 @@ namespace nowguaClient.Helpers
                     var r = ResponseMessage.Content.ReadAsStringAsync();
                     r.Wait();
 
-					if(r.Result is string)
-						this.Error.Result = r.Result;
-					else
-						this.Error.Result = JsonConvert.DeserializeObject<APIBadRequestResult>(r.Result);
+					this.Error.Result = JsonConvert.DeserializeObject<APIBadRequestResult>(r.Result);
                 }
 				else
                 {

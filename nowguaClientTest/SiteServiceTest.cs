@@ -35,13 +35,14 @@ namespace nowguaClientTest
             createModel.Contacts.Add("Henry", "KESTREL", "h.kestrel@outlook.com", "+33600000000", false);
 
             // Adresse du site (obligatoire)
-            createModel.AccessInformation = new SiteAccessInformation {
-                Code = "12345",
-                Commentaire = "New Commentaire Test ! ",
-                KeyRef = "referenceClef",
-                LocationType = new LabelModel<int>(1, "embarque"),
-                Type = new List<LabelModel<int>>(){ new LabelModel<int>(1, "Badge"), new LabelModel<int>(0, "Code") } 
-            };
+            createModel.AccessInformation = new SiteAccessInformation(
+				new List<LabelModel<int>>() { new LabelModel<int>(1, "Badge"), new LabelModel<int>(0, "Code") }, 
+				"12345",
+				null,
+				"New Commentaire Test ! ",
+				new LabelModel<int>(1, "embarque"),
+				"referenceClef"          
+				);
 
             string siteId = await ng.Sites.Create(createModel);
             Assert.NotEmpty(siteId);
@@ -73,15 +74,16 @@ namespace nowguaClientTest
             editSiteModel.TransmitterNumber = "T0123456789";
             editSiteModel.Address = new Address("229 Boulevard Alsace-Lorraine, Rosny-sous-Bois, France", "", 48.882486, 2.494292);
             editSiteModel.AccessInformation = new SiteAccessInformation
-            {
-                Code = "54321",
-                Commentaire = "Edit Commentaire Test ! ",
-                KeyRef = " Edit referenceClef",
-                LocationType = new LabelModel<int>(1, "embarque"),
-                Type = new List<LabelModel<int>>() { new LabelModel<int>(0, "Code") }
-            };
+			(
+				new List<LabelModel<int>>() { new LabelModel<int>(0, "Code") },
+				"54321",
+				null,
+				"edit Commentaire Test ! ",
+				new LabelModel<int>(1, "embarque"),
+				"referenceClef"
+				);
 
-            await ng.Sites.Edit(editSiteModel);
+			 await ng.Sites.Edit(editSiteModel);
 
             site = await ng.Sites.Get(siteId);
             Assert.NotNull(site);
